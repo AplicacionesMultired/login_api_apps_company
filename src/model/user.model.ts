@@ -50,7 +50,7 @@ User.init({
   resetPasswordExpires: { type: DataTypes.DATE, allowNull: true, },
 }, {
   sequelize: login_unif,
-  modelName: 'Login_User',
+  modelName: 'login_users',
 })
 
 export { User }
