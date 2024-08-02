@@ -25,6 +25,10 @@ const User = z.object({
     invalid_type_error: 'La empresa debe ser un número',
     required_error: 'La empresa es requerida',
   }).int().min(0).max(2),
+  process: z.number({
+    invalid_type_error: 'El proceso debe ser un número',
+    required_error: 'El proceso es requerido',
+  }).int().min(0).max(12),
   rol: z.string({
     invalid_type_error: 'El rol debe ser una cadena de texto',
     required_error: 'El rol es requerido',
