@@ -54,3 +54,17 @@ export const loginUserServices = async (user: UserLoginType) => {
     throw error;
   }
 }
+
+export const getUserByToken = async (token: string) => {
+  try {
+    const user = await User.findOne({ where: { username: token } });
+
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
