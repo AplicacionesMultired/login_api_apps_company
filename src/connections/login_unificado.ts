@@ -10,7 +10,8 @@ const DB_PORT = parseInt(process.env.DB_PORT as string)
 const login_unif = new Sequelize(DB_NAME, DB_USER, DB_PASS, {
   host: DB_HOST,
   port : DB_PORT,
-  dialect: 'mysql'
+  dialect: 'mysql',
+  timezone: '-05:00',
 });
 
 export { login_unif };

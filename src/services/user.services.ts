@@ -1,7 +1,7 @@
-import 'dotenv/config';
-import bcrypt from 'bcryptjs';
+import { UserType, UserLoginType } from "../Schemas/UserSchema";
 import { User } from "../model/user.model";
-import { UserType } from "../Schemas/UserSchema";
+import bcrypt from 'bcryptjs';
+import 'dotenv/config';
 
 const BCRYPT_SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS as string, 10);
 const USERNAME_PREFIX = 'CP';
@@ -30,3 +30,27 @@ export const registerUserServices = async (user: UserType) => {
     throw error;
   }
 };
+
+export const loginUserServices = async (user: UserLoginType) => {
+  try {
+    const userFound = await User.findOne({ where: { username: user.username } });
+
+    if (!userFound) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    const passwordMatch = bcrypt.compareSync(user.password, userFound.password);
+
+    if (!passwordMatch) {
+      throw new Error('Contraseña incorrecta');
+    }
+
+    if(userFound.state === false) {
+      throw new Error('Usuario inactivo');
+    }
+
+    return userFound;
+  } catch (error) {
+    throw error;
+  }
+}

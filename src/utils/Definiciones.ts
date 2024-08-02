@@ -1,17 +1,15 @@
-type Empresa = 0 | 1 | 2;
-type Procceso = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12; 
 
-export function Company(company: Empresa): string {
-  const companies: { [key in 0 | 1 | 2]: string } = {
-    0: 'Multired y Servired',
+export function Company(company: number): string {
+  const companies: { [key in number]: string } = {
+    0: 'MultiredYServired',
     1: 'Multired',
     2: 'Servired'
   };
   return companies[company];
 }
 
-export function Procces(procces: Procceso): string {
-  const process: { [key in Procceso]: string } = {
+export function Procces(procces: number): string {
+  const process: { [key in number]: string } = {
     0: 'Cajas',
     1: 'Técnología',
     2: 'Contabilidad',
