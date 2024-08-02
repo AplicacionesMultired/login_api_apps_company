@@ -36,7 +36,7 @@ const User = z.object({
 });
 
 // Define el tipo inferido a partir del esquema
-type UserType = z.infer<typeof User>;
+export type UserType = z.infer<typeof User>;
 
 // Función para validar el usuario
 export function validateUser(user: UserType) {

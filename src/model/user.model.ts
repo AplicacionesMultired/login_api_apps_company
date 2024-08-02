@@ -1,23 +1,16 @@
 import { login_unif } from '../connections/login_unificado'
 import { DataTypes, Model, Optional } from 'sequelize'
+import { UserType } from '../Schemas/UserSchema';
 
-type UserAttributes = {
+interface UserAttributes extends UserType {
   id: string;
-  names: string;
-  lastNames: string;
-  document: number;
-  phone: number;
-  email: string;
   username: string;
   password: string;
+  state: boolean;
   password2?: string;
-  state: number;
-  company: number;
-  proceso: number;
-  rol: string;
   resetPasswordToken?: string;
   resetPasswordExpires?: Date;
-}
+} 
 
 type UserCreationAttributes = Optional<UserAttributes, 'id' | 'password2' | 'resetPasswordToken' | 'resetPasswordExpires'>
 
@@ -31,27 +24,27 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   declare username: string;
   declare password: string;
   declare password2: string;
-  declare state: number;
+  declare state: boolean;
   declare company: number;
-  declare proceso: number;
+  declare process: number;
   declare rol: string;
   declare resetPasswordToken: string;
   declare resetPasswordExpires: Date;
 }
 
 User.init({
-  id: { type: DataTypes.STRING, primaryKey: true, allowNull: false, unique: true },
+  id: { type: DataTypes.UUID, primaryKey: true, defaultValue: DataTypes.UUIDV4 },
   names: { type: DataTypes.STRING, allowNull: false, },
   lastNames: { type: DataTypes.STRING, allowNull: false, },
-  document: { type: DataTypes.INTEGER, allowNull: false, unique: true },
-  phone: { type: DataTypes.INTEGER, allowNull: false, unique: true },
+  document: { type: DataTypes.BIGINT, allowNull: false, unique: true },
+  phone: { type: DataTypes.BIGINT, allowNull: false, unique: true },
   email: { type: DataTypes.STRING, allowNull: false, unique: true },
   username: { type: DataTypes.STRING, allowNull: false, unique: true },
   password: { type: DataTypes.STRING, allowNull: false, },
   password2: { type: DataTypes.STRING, allowNull: true, },
-  state: { type: DataTypes.INTEGER, allowNull: false, },
+  state: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true},
   company: { type: DataTypes.INTEGER, allowNull: false, },
-  proceso: { type: DataTypes.INTEGER, allowNull: false, },
+  process: { type: DataTypes.INTEGER, allowNull: false, },
   rol: { type: DataTypes.STRING, allowNull: false, },
   resetPasswordToken: { type: DataTypes.STRING, allowNull: true, },
   resetPasswordExpires: { type: DataTypes.DATE, allowNull: true, },
