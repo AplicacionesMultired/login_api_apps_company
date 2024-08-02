@@ -1,35 +1,26 @@
+import { registerUserServices } from "../services/user.services"
 import { validateUser } from "../Schemas/UserSchema"
 import { Request, Response } from "express"
-import { User } from "../model/user.model"
-import bycryt from 'bcryptjs'
-
-import 'dotenv/config'
-
-const BCRYPT_SALT_ROUNDS = process.env.BCRYPT_SALT_ROUNDS as string
+import isMainError from "../utils/funtions"
 
 export const createUser = async (req: Request, res: Response) => {
   try {
     const result = await validateUser(req.body)
 
-    // !! Esta lógica podría ser llevada a un servicio y mejorar la legibilidad del código
+    if (result.error) return res.status(400).json(result)
 
-    if (result.error) {
-      return res.status(400).json(result)
-    }
-
-    const threeLastDocument = result.data.document.toString().slice(-3)
-    const username = `CP${result.data.document}`
-    const pass = `CP${threeLastDocument}`
-    const password = bycryt.hashSync(pass, parseInt(BCRYPT_SALT_ROUNDS))
-
-    const state = true
-
-    await User.sync()
-    const userCreated = await User.create({ ...result.data, username, password, state })
+    const userCreated = await registerUserServices(result.data)
     
     return res.status(201).json(userCreated)
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: 'Error al crear el usuario' })
+  } catch (error: unknown) {
+    if (isMainError(error)) {
+      return res.status(400).json({ errorCode: error.parent.code, message: error.parent.sqlMessage})
+    } else if (error instanceof Error) {
+      console.log('General error:', error.message);
+      return res.status(500).json({ message: 'Internal server error' })
+    } else {
+      console.log('Unknown error:', error);
+      return res.status(500).json({ message: 'Error desconocido contacte al administrado del sistema' })
+    }
   }
-}
+} 
