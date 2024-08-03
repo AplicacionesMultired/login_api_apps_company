@@ -17,7 +17,7 @@ const port = process.env.PORT || 3000;
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(cors({
-  origin: '*',
+  origin: ['http://cartera.ganeapps.com', 'http://172.20.1.221', 'http://172.20.1.221:80'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   optionsSuccessStatus: 204
