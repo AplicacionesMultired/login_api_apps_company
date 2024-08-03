@@ -3,6 +3,7 @@ import { validateUser, validateUserLogin } from "../Schemas/UserSchema"
 import { Request, Response } from "express"
 
 const JWT_SECRET = process.env.JWT_SECRET as string
+const JWT_EXPIRES = process.env.JWT_EXPIRES_IN as string
 
 import jwt from 'jsonwebtoken'
 
@@ -47,8 +48,7 @@ export const loginUser = async (req: Request, res: Response) => {
       rol: user.rol
     }
 
-    jwt.sign(usuario, JWT_SECRET, {},
-      (err, token) => {
+    jwt.sign(usuario, JWT_SECRET, { expiresIn: JWT_EXPIRES }, (err, token) => {
         if (err) throw err;
         return res.cookie('token', token, { sameSite: 'none', secure: true }).status(200).json({ message: 'Login successful', usuario });
       });

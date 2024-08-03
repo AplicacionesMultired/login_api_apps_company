@@ -3,10 +3,10 @@ import { Router } from "express";
 
 export const userRouter = Router();
 
-userRouter.get('/profile', UserByToken)
+userRouter.post('/register', createUser)
 
 userRouter.post('/login', loginUser)
 
-userRouter.get('/logout', logoutUser)
+userRouter.get('/profile', UserByToken)
 
-userRouter.post('/register', createUser)
+userRouter.get('/logout', logoutUser)

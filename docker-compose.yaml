@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      image: login:v1.0
+    restart: always
+    container_name: api_login_v1
+    ports:
+      - "4000:80"
