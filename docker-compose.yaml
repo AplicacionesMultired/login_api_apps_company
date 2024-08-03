@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      image: login:v1.0
+    image: login:v1.0
     restart: always
     container_name: api_login_v1
     ports:
