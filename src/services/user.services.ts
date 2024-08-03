@@ -46,7 +46,7 @@ export const loginUserServices = async (user: UserLoginType) => {
     }
 
     if(userFound.state === false) {
-      throw new Error('Usuario inactivo');
+      throw new Error('El Usuario se encuentra inactivo');
     }
 
     return userFound;

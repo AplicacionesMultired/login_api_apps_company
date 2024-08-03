@@ -36,14 +36,16 @@ export const loginUser = async (req: Request, res: Response) => {
     if (result.error) return res.status(400).json(result);
     const user = await loginUserServices(result.data);
 
-    jwt.sign({ username: user.username, email: user.email, company: Company(user.company), process: Procces(user.process) }, JWT_SECRET, {},
+    const usuario = { username: user.username, email: user.email, company: Company(user.company), process: Procces(user.process), rol: user.rol }
+
+    jwt.sign(usuario, JWT_SECRET, {},
       (err, token) => {
         if (err) throw err;
-        return res.cookie('token', token, { sameSite: 'none', secure: true }).status(200).json({ message: 'Login successful' });
+        return res.cookie('token', token, { sameSite: 'none', secure: true }).status(200).json({ message: 'Login successful', usuario });
       });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: 'Internal server error' });
+  } catch (error: unknown) {
+    const err = error as Error;
+    return res.status(400).json(err.message);
   }
 }
 
@@ -63,5 +65,13 @@ export const UserByToken = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
+  }
+}
+
+export const logoutUser = async (req: Request, res: Response) => {
+  try {
+    return res.clearCookie('token').status(200).json({ message: 'Logout successful' })
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error' })
   }
 }
