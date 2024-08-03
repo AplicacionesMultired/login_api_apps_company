@@ -12,13 +12,15 @@ const v1 = '/api/v1';
 const app = express();
 const port = process.env.PORT || 3000;
 
-const CARTERA_FRONTEND = process.env.CARTERA_FRONTEND as string;
+// const CARTERA_FRONTEND = process.env.CARTERA_FRONTEND as string;
 
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(cors({
-  origin: [CARTERA_FRONTEND],
-  credentials: true
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204
 }));
 
 app.use(express.json());
