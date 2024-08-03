@@ -1,0 +1,12 @@
+import { createUser, loginUser, logoutUser, UserByToken } from "../controllers/user.controllers";
+import { Router } from "express";
+
+export const userRouter = Router();
+
+userRouter.post('/register', createUser)
+
+userRouter.post('/login', loginUser)
+
+userRouter.get('/profile', UserByToken)
+
+userRouter.get('/logout', logoutUser)
