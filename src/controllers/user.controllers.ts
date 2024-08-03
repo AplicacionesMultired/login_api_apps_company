@@ -36,7 +36,16 @@ export const loginUser = async (req: Request, res: Response) => {
     if (result.error) return res.status(400).json(result);
     const user = await loginUserServices(result.data);
 
-    const usuario = { username: user.username, email: user.email, company: Company(user.company), process: Procces(user.process), rol: user.rol }
+    const usuario = { 
+      id: user.id,
+      names: user.names,
+      lastnames: user.lastNames,
+      username: user.username,
+      email: user.email, 
+      company: Company(user.company), 
+      process: Procces(user.process),
+      rol: user.rol
+    }
 
     jwt.sign(usuario, JWT_SECRET, {},
       (err, token) => {

@@ -1,11 +1,5 @@
 import z from 'zod';
 
-enum Company {
-  'MultiredYServired' = '0',
-  'Multired' = '1',
-  'Servired' = '2'
-}
-
 const User = z.object({
   names: z.string({
     invalid_type_error: 'El nombre debe ser una cadena de texto',
