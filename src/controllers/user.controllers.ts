@@ -34,19 +34,13 @@ export const loginUser = async (req: Request, res: Response) => {
     const result = await validateUserLogin(req.body);
 
     if (result.error) return res.status(400).json(result);
-
     const user = await loginUserServices(result.data);
 
-    jwt.sign({ username: user.username, email: user.email }, JWT_SECRET, {}, (err, token) => {
-      if (err) throw err;
-
-      
-      return res.cookie('token', token, { 
-        sameSite: 'none', 
-        secure: true 
-      }).status(200).json({ message: 'Login successful' });
-    });
-
+    jwt.sign({ username: user.username, email: user.email, company: Company(user.company), process: Procces(user.process) }, JWT_SECRET, {},
+      (err, token) => {
+        if (err) throw err;
+        return res.cookie('token', token, { sameSite: 'none', secure: true }).status(200).json({ message: 'Login successful' });
+      });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal server error' });
@@ -57,15 +51,15 @@ export const UserByToken = async (req: Request, res: Response) => {
   try {
     const token = req.cookies?.token;
 
-    if (token){
+    if (token) {
       jwt.verify(token, JWT_SECRET, {}, async (err, decoded) => {
         if (err) throw err;
         return res.status(200).json(decoded);
       });
-    }else {
+    } else {
       return res.status(401).json({ message: 'Unauthorized' });
     }
-    
+
   } catch (error) {
     console.log(error);
     res.status(500).json(error);

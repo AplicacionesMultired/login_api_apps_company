@@ -1,5 +1,6 @@
 import cookieParser from 'cookie-parser';
 import express from 'express';
+import morgan from 'morgan';
 import cors from 'cors';
 import 'dotenv/config';
 
@@ -11,9 +12,10 @@ const v1 = '/api/v1';
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(cors({
-  origin: ['http://172.20.1.110:5173', 'http://localhost:5173'],
+  origin: 'http://localhost:5173',
   credentials: true
 }));
 
