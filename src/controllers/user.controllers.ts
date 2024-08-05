@@ -4,6 +4,7 @@ import { Request, Response } from "express"
 
 const JWT_SECRET = process.env.JWT_SECRET as string
 const JWT_EXPIRES = process.env.JWT_EXPIRES_IN as string
+const NODE_ENV = process.env.ENTORNO as string
 
 import jwt from 'jsonwebtoken'
 
@@ -35,23 +36,31 @@ export const loginUser = async (req: Request, res: Response) => {
     const result = await validateUserLogin(req.body);
 
     if (result.error) return res.status(400).json(result);
+
     const user = await loginUserServices(result.data);
 
-    const usuario = { 
+    const app = result.data.app;
+    
+    const usuario = {
       id: user.id,
       names: user.names,
       lastnames: user.lastNames,
       username: user.username,
-      email: user.email, 
-      company: Company(user.company), 
+      email: user.email,
+      company: Company(user.company),
       process: Procces(user.process),
-      rol: user.rol
+      rol: user.rol,
+      app: app
     }
 
     jwt.sign(usuario, JWT_SECRET, { expiresIn: JWT_EXPIRES }, (err, token) => {
-        if (err) throw err;
-        return res.cookie('token', token, { sameSite: 'none', secure: true }).status(200).json({ message: 'Login successful', usuario });
-      });
+      if (err) throw err;
+      return res.cookie(app, token, {
+        sameSite: NODE_ENV === 'dev' ? 'lax' : 'none',
+        secure: NODE_ENV === 'dev' ? false : true,
+      })
+        .status(200).json({ message: 'Login successful', usuario });
+    });
   } catch (error: unknown) {
     const err = error as Error;
     return res.status(400).json(err.message);
@@ -60,8 +69,9 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const UserByToken = async (req: Request, res: Response) => {
   try {
-    const token = req.cookies?.token;
-
+    const app: string = req.query.app as string;
+    const token = req.cookies[app];
+  
     if (token) {
       jwt.verify(token, JWT_SECRET, {}, async (err, decoded) => {
         if (err) throw err;
@@ -78,9 +88,12 @@ export const UserByToken = async (req: Request, res: Response) => {
 }
 
 export const logoutUser = async (req: Request, res: Response) => {
+  const token = req.body.token as string;
+  const log = token.split('=')[0]
+   
   try {
     // TODO: en el futuro se debe recibir el nombre de la cookie a eliminar
-    return res.clearCookie('token').status(200).json({ message: 'Logout successful' })
+    return res.clearCookie(log).status(200).json({ message: 'Logout successful' })
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error' })
   }
