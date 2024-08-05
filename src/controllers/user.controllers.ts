@@ -79,6 +79,7 @@ export const UserByToken = async (req: Request, res: Response) => {
 
 export const logoutUser = async (req: Request, res: Response) => {
   try {
+    // TODO: en el futuro se debe recibir el nombre de la cookie a eliminar
     return res.clearCookie('token').status(200).json({ message: 'Logout successful' })
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error' })

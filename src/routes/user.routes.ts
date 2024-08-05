@@ -9,4 +9,4 @@ userRouter.post('/login', loginUser)
 
 userRouter.get('/profile', UserByToken)
 
-userRouter.get('/logout', logoutUser)
+userRouter.post('/logout', logoutUser)
