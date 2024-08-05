@@ -1,34 +1,29 @@
+import corsMiddleware from './corsConfig';
+
 import cookieParser from 'cookie-parser';
+import { PORT } from './configs';
 import express from 'express';
 import morgan from 'morgan';
-import cors from 'cors';
-import 'dotenv/config';
 
-import { userRouter } from './routes/user.routes';
+
 import { login_unif } from './connections/login_unificado';
+import { userRouter } from './routes/user.routes';
 
 const v1 = '/api/v1';
 
-const app = express();
-const port = process.env.PORT || 3000;
+import 'dotenv/config';
 
-// const CARTERA_FRONTEND = process.env.CARTERA_FRONTEND as string;
+const app = express();
 
 app.use(morgan('dev'));
 app.use(cookieParser());
-app.use(cors({
-  origin: ['http://cartera.ganeapps.com', 'http://172.20.1.221', 'http://172.20.1.221:80'],
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  optionsSuccessStatus: 204
-}));
-
 app.use(express.json());
+app.use(corsMiddleware)
 
 app.use(v1, userRouter);
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 const testConnection = async () => {
