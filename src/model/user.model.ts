@@ -24,10 +24,10 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   declare username: string;
   declare password: string;
   declare password2: string;
-  declare state: boolean;
   declare company: number;
   declare process: number;
-  declare rol: string;
+  declare sub_process: number;
+  declare state: boolean;
   declare resetPasswordToken: string;
   declare resetPasswordExpires: Date;
 }
@@ -44,8 +44,8 @@ User.init({
   password2: { type: DataTypes.STRING, allowNull: true, },
   state: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true},
   company: { type: DataTypes.INTEGER, allowNull: false, },
-  process: { type: DataTypes.INTEGER, allowNull: false, },
-  rol: { type: DataTypes.STRING, allowNull: false, },
+  process: { type: DataTypes.INTEGER, allowNull: false, validate: { min: 0, max: 12 } },
+  sub_process: { type: DataTypes.STRING, allowNull: false, validate: { min: 0, max: 30 } },
   resetPasswordToken: { type: DataTypes.STRING, allowNull: true, },
   resetPasswordExpires: { type: DataTypes.DATE, allowNull: true, },
 }, {

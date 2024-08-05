@@ -31,10 +31,10 @@ const User = z.object({
     invalid_type_error: 'El proceso debe ser un número',
     required_error: 'El proceso es requerido',
   }).int().min(0).max(12),
-  rol: z.string({
-    invalid_type_error: 'El rol debe ser una cadena de texto',
-    required_error: 'El rol es requerido',
-  }),
+  sub_process: z.number({
+    invalid_type_error: 'El sub proceso debe ser un número',
+    required_error: 'El sub proceso es requerido',
+  }).int().min(0).max(30)
 });
 
 const UserLogin = z.object({
