@@ -19,6 +19,28 @@ pipeline {
                 }
             }
         }
+
+        stage('down docker compose'){
+            steps {
+                script {
+                    sh 'docker compose down'
+                }
+            }
+        }
+
+        stage('delete images if exist') {
+            steps{
+                script {
+                    def images = 'login:v1.0'
+                    if (sh(script: "docker images -q ${images}", returnStdout: true).trim()) {
+                        sh "docker rmi ${images}"
+                    } else {
+                        echo "Image ${images} does not exist."
+                        echo "continuing..."
+                    }
+                }
+            }
+        }
         stage('run docker compose'){
             steps {
                 script {
