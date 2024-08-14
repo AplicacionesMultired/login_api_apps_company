@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  api:
+  api-login-v1:
     build:
       context: .
       dockerfile: Dockerfile
