@@ -15,7 +15,6 @@ pipeline {
                 script {
                     def envApiContent = readFile(ENV_API_LOGIN)
                     writeFile file: './.env', text: envApiContent
-
                 }
             }
         }
@@ -23,7 +22,7 @@ pipeline {
         stage('down docker compose'){
             steps {
                 script {
-                    sh 'docker compose down'
+                    sh 'sudo docker compose down'
                 }
             }
         }
@@ -33,7 +32,7 @@ pipeline {
                 script {
                     def images = 'login:v1.0'
                     if (sh(script: "docker images -q ${images}", returnStdout: true).trim()) {
-                        sh "docker rmi ${images}"
+                        sh "sudo docker rmi ${images}"
                     } else {
                         echo "Image ${images} does not exist."
                         echo "continuing..."
@@ -44,7 +43,7 @@ pipeline {
         stage('run docker compose'){
             steps {
                 script {
-                    sh 'docker compose up -d'
+                    sh 'sudo docker compose up -d'
                 }
             }
         }
