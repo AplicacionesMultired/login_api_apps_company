@@ -8,5 +8,10 @@ services:
     image: login:v1.0
     restart: always
     container_name: api_login_v1
-    ports:
-      - "4000:80"
+    networks:
+      - red-gane-int
+    # ports:
+    #   - "4000:80"
+networks:
+  red-gane-int:
+    external: true
