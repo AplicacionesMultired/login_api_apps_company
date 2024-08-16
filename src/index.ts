@@ -15,7 +15,7 @@ const app = express();
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
-app.use(corsMiddleware)
+app.use(corsMiddleware);
 
 // TODO: rutas de la API
 app.use(v1, userRouter);

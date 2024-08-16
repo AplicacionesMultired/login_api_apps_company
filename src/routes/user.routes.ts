@@ -1,5 +1,5 @@
-import { createUser, loginUser, logoutUser, UserByToken } from "../controllers/user.controllers";
-import { Router } from "express";
+import { createUser, loginUser, logoutUser, UserByToken } from '../controllers/user.controllers';
+import { Router } from 'express';
 
 export const userRouter = Router();
 

@@ -1,4 +1,4 @@
-import { MainError } from "../types/error.mysql";
+import { MainError } from '../types/error.mysql';
 
 /**
  * Función para validar si un Error de type unknow pertenece a Interface MainError. 

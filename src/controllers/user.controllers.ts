@@ -1,6 +1,6 @@
-import { loginUserServices, registerUserServices } from "../services/user.services"
-import { validateUser, validateUserLogin } from "../Schemas/UserSchema"
-import { Request, Response } from "express"
+import { loginUserServices, registerUserServices } from '../services/user.services'
+import { validateUser, validateUserLogin } from '../Schemas/UserSchema'
+import { Request, Response } from 'express'
 
 const JWT_SECRET = process.env.JWT_SECRET as string
 const JWT_EXPIRES = process.env.JWT_EXPIRES_IN as string
@@ -8,8 +8,8 @@ const NODE_ENV = process.env.ENTORNO as string
 
 import jwt from 'jsonwebtoken'
 
-import isMainError from "../utils/funtions"
-import { Company, Procces, Sub_Procces } from "../utils/Definiciones"
+import isMainError from '../utils/funtions'
+import { Company, Procces, Sub_Procces } from '../utils/Definiciones'
 
 export const createUser = async (req: Request, res: Response) => {
   try {
