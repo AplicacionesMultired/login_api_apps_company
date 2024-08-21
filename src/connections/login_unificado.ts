@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize";
+import { Sequelize } from 'sequelize';
 import 'dotenv/config';
 
 const DB_NAME = process.env.DB_NAME as string

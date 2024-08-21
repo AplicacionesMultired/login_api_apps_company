@@ -1,5 +1,5 @@
-import { UserType, UserLoginType } from "../Schemas/UserSchema";
-import { User } from "../model/user.model";
+import { UserType, UserLoginType } from '../Schemas/UserSchema';
+import { User } from '../model/user.model';
 import bcrypt from 'bcryptjs';
 import 'dotenv/config';
 
