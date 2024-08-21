@@ -59,7 +59,7 @@ export const loginUser = async (req: Request, res: Response) => {
         sameSite: NODE_ENV === 'dev' ? 'lax' : 'none',
         secure: NODE_ENV === 'dev' ? false : true,
       })
-        .status(200).json({ message: 'Login successful', usuario });
+        .status(200).json({ message: 'Login successful' });
     });
   } catch (error: unknown) {
     const err = error as Error;
