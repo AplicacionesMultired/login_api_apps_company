@@ -10,6 +10,7 @@ import jwt from 'jsonwebtoken'
 
 import isMainError from '../utils/funtions'
 import { Company, Procces, Sub_Procces } from '../utils/Definiciones'
+import { verifyToken } from '../utils/verifyToken'
 
 export const createUser = async (req: Request, res: Response) => {
   try {
@@ -71,21 +72,25 @@ export const UserByToken = async (req: Request, res: Response) => {
   try {
     const app: string = req.query.app as string;
     const token = req.cookies[app];
-  
-    if (token) {
-      jwt.verify(token, JWT_SECRET, {}, async (err, decoded) => {
-        if (err) throw err;
-        return res.status(200).json(decoded);
-      });
-    } else {
+
+    if (!token) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
+    try {
+      const decoded = await verifyToken(token, JWT_SECRET); 
+      return res.status(200).json(decoded);
+    } catch (err) {
+      if (err instanceof jwt.TokenExpiredError) {
+        return res.status(401).json({ message: 'Token expired' });
+      }
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
   } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
+    console.error(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
-}
+};
 
 export const logoutUser = async (req: Request, res: Response) => {
   const token = req.body.token as string;
