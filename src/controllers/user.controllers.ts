@@ -8,9 +8,9 @@ const NODE_ENV = process.env.ENTORNO as string
 
 import jwt from 'jsonwebtoken'
 
-import isMainError from '../utils/funtions'
 import { Company, Procces, Sub_Procces } from '../utils/Definiciones'
 import { verifyToken } from '../utils/verifyToken'
+import isMainError from '../utils/funtions'
 
 export const createUser = async (req: Request, res: Response) => {
   try {
