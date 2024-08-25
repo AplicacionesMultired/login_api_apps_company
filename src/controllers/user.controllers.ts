@@ -16,7 +16,10 @@ export const createUser = async (req: Request, res: Response) => {
   try {
     const result = await validateUser(req.body)
 
-    if (result.error) return res.status(400).json(result)
+    if (result.error) {
+      const meesage = result.error.issues[0].message
+      return res.status(400).json({ error: meesage || 'Error en los datos enviados' })
+    }
 
     const userCreated = await registerUserServices(result.data)
 
