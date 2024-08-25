@@ -114,6 +114,7 @@ export const findAllUsers = async (req: Request, res: Response) => {
     const users = results.map( user => {
       return {
         id: user.id,
+        document: user.document,
         names: user.names,
         lastnames: user.lastNames,
         username: user.username,
