@@ -68,3 +68,12 @@ export const getUserByToken = async (token: string) => {
     throw error;
   }
 }
+
+export const findUserServices = async () => {
+  try {
+    const users = await User.findAll({ attributes: { exclude: ['password', 'password2', 'resetPasswordToken', 'resetPasswordExpires' ] } });
+    return users;
+  } catch (error) {
+    throw error;
+  }
+}
