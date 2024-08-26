@@ -1,4 +1,4 @@
-import { findUserServices, loginUserServices, registerUserServices } from '../services/user.services'
+import { findUserServices, loginUserServices, registerUserServices, findUserServicesById } from '../services/user.services'
 import { validateUser, validateUserLogin } from '../Schemas/UserSchema'
 import { Request, Response } from 'express'
 
@@ -129,6 +129,21 @@ export const findAllUsers = async (req: Request, res: Response) => {
     })
 
     return res.status(200).json(users);
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+export const findUserById = async (req: Request, res: Response) => {
+  try {
+    const document = req.params.id;
+    const user = await findUserServicesById(document);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    return res.status(200).json(user);
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error' });
   }

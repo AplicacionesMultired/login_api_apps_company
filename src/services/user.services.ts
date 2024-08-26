@@ -77,3 +77,12 @@ export const findUserServices = async () => {
     throw error;
   }
 }
+
+export const findUserServicesById = async (id: string) => {
+  try {
+    const user = await User.findOne({ where: { document: id }, attributes: { exclude: ['password', 'password2', 'resetPasswordToken', 'resetPasswordExpires' ] } })
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
