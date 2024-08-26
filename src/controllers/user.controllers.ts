@@ -115,6 +115,7 @@ export const findAllUsers = async (req: Request, res: Response) => {
       return {
         id: user.id,
         document: user.document,
+        phone: user.phone,
         names: user.names,
         lastnames: user.lastNames,
         username: user.username,
@@ -137,11 +138,28 @@ export const findAllUsers = async (req: Request, res: Response) => {
 export const findUserById = async (req: Request, res: Response) => {
   try {
     const document = req.params.id;
-    const user = await findUserServicesById(document);
+    const result = await findUserServicesById(document);
 
-    if (!user) {
+    if (!result) {
       return res.status(404).json({ message: 'User not found' });
     }
+
+    const user = {
+      id: result.id,
+      document: result.document,
+      phone: result.phone,
+      names: result.names,
+      lastnames: result.lastNames,
+      username: result.username,
+      email: result.email,
+      company: Company(result.company),
+      process: Procces(result.process),
+      sub_process: Sub_Procces(result.sub_process),
+      state: result.state,
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt 
+    }
+
 
     return res.status(200).json(user);
   } catch (error) {
