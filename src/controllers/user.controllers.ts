@@ -1,4 +1,4 @@
-import { loginUserServices, registerUserServices } from '../services/user.services'
+import { findUserServices, loginUserServices, registerUserServices, findUserServicesById } from '../services/user.services'
 import { validateUser, validateUserLogin } from '../Schemas/UserSchema'
 import { Request, Response } from 'express'
 
@@ -16,7 +16,10 @@ export const createUser = async (req: Request, res: Response) => {
   try {
     const result = await validateUser(req.body)
 
-    if (result.error) return res.status(400).json(result)
+    if (result.error) {
+      const meesage = result.error.issues[0].message
+      return res.status(400).json({ error: meesage || 'Error en los datos enviados' })
+    }
 
     const userCreated = await registerUserServices(result.data)
 
@@ -90,16 +93,76 @@ export const UserByToken = async (req: Request, res: Response) => {
     console.error(error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
-};
+}
 
 export const logoutUser = async (req: Request, res: Response) => {
   const token = req.body.token as string;
-  const log = token.split('=')[0]
+  const clearToken = token.split('=')[0]
    
   try {
     // TODO: en el futuro se debe recibir el nombre de la cookie a eliminar
-    return res.clearCookie(log).status(200).json({ message: 'Logout successful' })
+    return res.clearCookie(clearToken).status(200).json({ message: 'Logout successful' })
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error' })
+  }
+}
+
+export const findAllUsers = async (req: Request, res: Response) => {
+  try {
+    const results = await findUserServices();
+
+    const users = results.map( user => {
+      return {
+        id: user.id,
+        document: user.document,
+        phone: user.phone,
+        names: user.names,
+        lastnames: user.lastNames,
+        username: user.username,
+        email: user.email,
+        company: Company(user.company),
+        process: Procces(user.process),
+        sub_process: Sub_Procces(user.sub_process),
+        state: user.state,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt 
+      }
+    })
+
+    return res.status(200).json(users);
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+export const findUserById = async (req: Request, res: Response) => {
+  try {
+    const document = req.params.id;
+    const result = await findUserServicesById(document);
+
+    if (!result) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const user = {
+      id: result.id,
+      document: result.document,
+      phone: result.phone,
+      names: result.names,
+      lastnames: result.lastNames,
+      username: result.username,
+      email: result.email,
+      company: Company(result.company),
+      process: Procces(result.process),
+      sub_process: Sub_Procces(result.sub_process),
+      state: result.state,
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt 
+    }
+
+
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error' });
   }
 }

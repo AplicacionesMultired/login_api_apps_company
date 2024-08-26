@@ -4,19 +4,19 @@ const User = z.object({
   names: z.string({
     invalid_type_error: 'El nombre debe ser una cadena de texto',
     required_error: 'El nombre es requerido',
-  }),
+  }).min(4, { message: 'Los nombres son requeridos' }),
   lastNames: z.string({
     invalid_type_error: 'El apellido debe ser una cadena de texto',
     required_error: 'El apellido es requerido',
-  }),
+  }).min(4, { message: 'Los apellidos son requeridos' }),
   document: z.number({
-    invalid_type_error: 'El documento debe ser un número',
+    invalid_type_error: 'El documento es requerido',
     required_error: 'El documento es requerido',
-  }),
+  }).min(6, { message: 'El documento es requerido' }),
   phone: z.number({
-    invalid_type_error: 'El teléfono debe ser un número',
+    invalid_type_error: 'El teléfono es requerido',
     required_error: 'El teléfono es requerido',
-  }),
+  }).min(6, { message: 'El teléfono es requerido' }),
   email: z.string({
     invalid_type_error: 'El correo debe ser una cadena de texto',
     required_error: 'El correo es requerido',
@@ -24,15 +24,15 @@ const User = z.object({
     message: 'El correo debe contener un @',
   }),
   company: z.number({
-    invalid_type_error: 'La compañía debe ser un número',
+    invalid_type_error: 'La compañía es requerida',
     required_error: 'La compañía es requerida',
   }).int().min(0).max(2),
   process: z.number({
-    invalid_type_error: 'El proceso debe ser un número',
+    invalid_type_error: 'El proceso es requerido',
     required_error: 'El proceso es requerido',
   }).int().min(0).max(12),
   sub_process: z.number({
-    invalid_type_error: 'El sub proceso debe ser un número',
+    invalid_type_error: 'El sub-proceso es requerido',
     required_error: 'El sub proceso es requerido',
   }).int().min(0).max(30)
 });
@@ -56,8 +56,20 @@ const UserLogin = z.object({
 export type UserType = z.infer<typeof User>;
 export type UserLoginType = z.infer<typeof UserLogin>;
 
+function convertUserTypes(user: UserType): UserType {
+  return {
+    ...user,
+    document: parseInt(user.document as any),
+    phone: parseInt(user.phone as any),
+    company: parseInt(user.company as any),
+    process: parseInt(user.process as any),
+    sub_process: parseInt(user.sub_process as any),
+  };
+}
+
 export function validateUser(user: UserType) {
-  return User.safeParseAsync(user);
+  const convertedUser = convertUserTypes(user);
+  return User.safeParseAsync(convertedUser);
 }
 
 export function validateUserLogin(user: UserLoginType) {

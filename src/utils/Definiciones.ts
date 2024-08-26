@@ -51,12 +51,12 @@ export function Procces(procces: number): string {
 */
 export function Sub_Procces(sub_procces: number): string {
   const sub_process: { [key in number]: string } = {
-    0: 'soporte y mantenimiento',
-    1: 'Sub proceso 2',
-    2: 'Sub proceso 3',
-    3: 'Sub proceso 4',
-    4: 'Sub proceso 5',
-    5: 'cartera',
+    0: 'soporte',
+    1: 'coordinador soporte',
+    2: 'cartera',
+    3: 'aux contable',
+    4: 'aux administrativo',
+    5: 'aux cartera',
     6: 'Sub proceso 7',
     7: 'Sub proceso 8',
     8: 'Sub proceso 9',

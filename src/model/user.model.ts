@@ -30,6 +30,8 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   declare state: boolean;
   declare resetPasswordToken: string;
   declare resetPasswordExpires: Date;
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 }
 
 User.init({
