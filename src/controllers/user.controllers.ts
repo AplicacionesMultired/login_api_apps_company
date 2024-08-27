@@ -1,4 +1,4 @@
-import { findUserServices, loginUserServices, registerUserServices, findUserServicesById, forgotPasswordServices, asignTokenServices } from '../services/user.services'
+import { findUserServices, loginUserServices, registerUserServices, findUserServicesById, forgotPasswordServices, asignTokenServices, resetPasswordService } from '../services/user.services'
 import { validateUser, validateUserLogin } from '../Schemas/UserSchema'
 import { Request, Response } from 'express'
 import cryto from 'node:crypto'
@@ -195,5 +195,22 @@ export const forgotPassword = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+export const resetPassword = async (req: Request, res: Response) => {
+  const { token, password, confirmPassword } = req.body
+
+  if(!token || !password || !confirmPassword) return res.status(400).json({ message: 'token y contraseña son requeridos' })
+  if (password !== confirmPassword) return res.status(400).json({ message: 'Las contraseñas no coinciden' })
+
+  try {
+    const response = await resetPasswordService(token, password)
+
+    if (response[0] === 0) return res.status(404).json({ message: 'Error al intentar restablecer contraseña' })
+
+    return res.status(200).json({ message: 'Contraseña restablecida correctamente' })
+  } catch (error) {
+    return res.status(500).json(error)
   }
 }

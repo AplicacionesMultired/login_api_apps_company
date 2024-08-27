@@ -1,4 +1,4 @@
-import { createUser, loginUser, logoutUser, UserByToken, findAllUsers, findUserById, forgotPassword } from '../controllers/user.controllers'
+import { createUser, loginUser, logoutUser, UserByToken, findAllUsers, findUserById, forgotPassword, resetPassword } from '../controllers/user.controllers'
 import { Router } from 'express';
 
 export const userRouter = Router();
@@ -16,3 +16,5 @@ userRouter.get('/users', findAllUsers)
 userRouter.get('/user/:id', findUserById)
 
 userRouter.post('/auth/forgot-password', forgotPassword)
+
+userRouter.post('/auth/reset-password', resetPassword)

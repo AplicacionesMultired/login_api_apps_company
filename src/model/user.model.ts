@@ -7,9 +7,9 @@ interface UserAttributes extends UserType {
   username: string;
   password: string;
   state: boolean;
-  password2?: string;
-  resetPasswordToken?: string;
-  resetPasswordExpires?: Date;
+  password2?: string | null;
+  resetPasswordToken?: string | null;
+  resetPasswordExpires?: Date | null;
 } 
 
 type UserCreationAttributes = Optional<UserAttributes, 'id' | 'password2' | 'resetPasswordToken' | 'resetPasswordExpires'>
