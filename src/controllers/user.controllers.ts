@@ -1,6 +1,7 @@
-import { findUserServices, loginUserServices, registerUserServices, findUserServicesById } from '../services/user.services'
+import { findUserServices, loginUserServices, registerUserServices, findUserServicesById, forgotPasswordServices, asignTokenServices, resetPasswordService } from '../services/user.services'
 import { validateUser, validateUserLogin } from '../Schemas/UserSchema'
 import { Request, Response } from 'express'
+import cryto from 'node:crypto'
 
 const JWT_SECRET = process.env.JWT_SECRET as string
 const JWT_EXPIRES = process.env.JWT_EXPIRES_IN as string
@@ -164,5 +165,55 @@ export const findUserById = async (req: Request, res: Response) => {
     return res.status(200).json(user);
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  const { document, email } = req.body;
+
+  if (!document || !email) {
+    return res.status(400).json({ message: 'documento y correo son requeridos' });
+  }
+
+  try {
+    const user = await forgotPasswordServices(document, email);
+
+    if(user.dataValues.id === null){
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const token = cryto.randomBytes(20).toString('hex');
+    const now = new Date(); now.setMinutes(now.getMinutes() + 10);
+    
+    const result = await asignTokenServices(token, now, document);
+
+    if (result[0] === 0) {
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+    
+    return res.status(200).json({ message: 'Solicitud Generada Correctamente' });
+  } catch (error) {
+    console.log(error);
+    if(error instanceof Error){
+      return res.status(400).json({ message: error.message });
+    }
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+export const resetPassword = async (req: Request, res: Response) => {
+  const { token, password, confirmPassword } = req.body
+
+  if(!token || !password || !confirmPassword) return res.status(400).json({ message: 'token y contraseña son requeridos' })
+  if (password !== confirmPassword) return res.status(400).json({ message: 'Las contraseñas no coinciden' })
+
+  try {
+    const response = await resetPasswordService(token, password)
+
+    if (response[0] === 0) return res.status(404).json({ message: 'Error al intentar restablecer contraseña' })
+
+    return res.status(200).json({ message: 'Contraseña restablecida correctamente' })
+  } catch (error) {
+    return res.status(500).json(error)
   }
 }
