@@ -86,3 +86,28 @@ export const findUserServicesById = async (id: string) => {
     throw error;
   }
 }
+
+export const forgotPasswordServices = async (document: number, email: string) => {
+  try {
+    const user = await User.findOne({ where: { document, email } });
+
+    if (!user) {
+      throw new Error('Usuario no encontrado documento o correo invalidos');
+    }
+
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const asignTokenServices = async (token: string, time: Date, document: number) => {
+  try {
+    const result = await User.update({ resetPasswordToken: token, resetPasswordExpires: time }, 
+      { where: { document } });
+    
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
