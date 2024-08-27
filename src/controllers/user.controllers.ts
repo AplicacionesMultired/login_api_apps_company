@@ -169,13 +169,13 @@ export const findUserById = async (req: Request, res: Response) => {
 }
 
 export const forgotPassword = async (req: Request, res: Response) => {
+  const { document, email } = req.body;
+
+  if (!document || !email) {
+    return res.status(400).json({ message: 'documento y correo son requeridos' });
+  }
+
   try {
-    const { document, email } = req.body;
-
-    if (!document || !email) {
-      return res.status(400).json({ message: 'Bad request' });
-    }
-
     const user = await forgotPasswordServices(document, email);
 
     if(user.dataValues.id === null){
@@ -194,6 +194,9 @@ export const forgotPassword = async (req: Request, res: Response) => {
     return res.status(200).json({ message: 'Solicitud Generada Correctamente' });
   } catch (error) {
     console.log(error);
+    if(error instanceof Error){
+      return res.status(400).json({ message: error.message });
+    }
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
