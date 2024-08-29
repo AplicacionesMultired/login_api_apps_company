@@ -12,6 +12,7 @@ import jwt from 'jsonwebtoken'
 import { Company, Procces, Sub_Procces } from '../utils/Definiciones'
 import { verifyToken } from '../utils/verifyToken'
 import isMainError from '../utils/funtions'
+import { CustomError } from '../class/ClassErrorSql'
 
 export const createUser = async (req: Request, res: Response) => {
   try {
@@ -40,12 +41,12 @@ export const loginUser = async (req: Request, res: Response) => {
   try {
     const result = await validateUserLogin(req.body);
 
-    if (result.error) return res.status(400).json(result);
+    if (result.error) return res.status(400).json(result.error.issues[0].message);
 
     const user = await loginUserServices(result.data);
 
     const app = result.data.app;
-    
+
     const usuario = {
       id: user.id,
       names: user.names,
@@ -67,8 +68,13 @@ export const loginUser = async (req: Request, res: Response) => {
         .status(200).json({ message: 'Login successful' });
     });
   } catch (error: unknown) {
-    const err = error as Error;
-    return res.status(400).json(err.message);
+    if (error instanceof CustomError) {
+      return res.status(400).json({ message: error.message, description: error.description });
+    }
+
+    if (error instanceof Error) {
+      return res.status(500).json({ message: 'Internal server error' });
+    }
   }
 }
 
@@ -82,7 +88,7 @@ export const UserByToken = async (req: Request, res: Response) => {
     }
 
     try {
-      const decoded = await verifyToken(token, JWT_SECRET); 
+      const decoded = await verifyToken(token, JWT_SECRET);
       return res.status(200).json(decoded);
     } catch (err) {
       if (err instanceof jwt.TokenExpiredError) {
@@ -99,7 +105,7 @@ export const UserByToken = async (req: Request, res: Response) => {
 export const logoutUser = async (req: Request, res: Response) => {
   const token = req.body.token as string;
   const clearToken = token.split('=')[0]
-   
+
   try {
     // TODO: en el futuro se debe recibir el nombre de la cookie a eliminar
     return res.clearCookie(clearToken).status(200).json({ message: 'Logout successful' })
@@ -112,7 +118,7 @@ export const findAllUsers = async (req: Request, res: Response) => {
   try {
     const results = await findUserServices();
 
-    const users = results.map( user => {
+    const users = results.map(user => {
       return {
         id: user.id,
         document: user.document,
@@ -126,7 +132,7 @@ export const findAllUsers = async (req: Request, res: Response) => {
         sub_process: Sub_Procces(user.sub_process),
         state: user.state,
         createdAt: user.createdAt,
-        updatedAt: user.updatedAt 
+        updatedAt: user.updatedAt
       }
     })
 
@@ -158,7 +164,7 @@ export const findUserById = async (req: Request, res: Response) => {
       sub_process: Sub_Procces(result.sub_process),
       state: result.state,
       createdAt: result.createdAt,
-      updatedAt: result.updatedAt 
+      updatedAt: result.updatedAt
     }
 
 
@@ -178,23 +184,23 @@ export const forgotPassword = async (req: Request, res: Response) => {
   try {
     const user = await forgotPasswordServices(document, email);
 
-    if(user.dataValues.id === null){
+    if (user.dataValues.id === null) {
       return res.status(404).json({ message: 'User not found' });
     }
 
     const token = cryto.randomBytes(20).toString('hex');
     const now = new Date(); now.setMinutes(now.getMinutes() + 10);
-    
+
     const result = await asignTokenServices(token, now, document);
 
     if (result[0] === 0) {
       return res.status(500).json({ message: 'Internal server error' });
     }
-    
+
     return res.status(200).json({ message: 'Solicitud Generada Correctamente' });
   } catch (error) {
     console.log(error);
-    if(error instanceof Error){
+    if (error instanceof Error) {
       return res.status(400).json({ message: error.message });
     }
     return res.status(500).json({ message: 'Internal server error' });
@@ -204,7 +210,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 export const resetPassword = async (req: Request, res: Response) => {
   const { token, password, confirmPassword } = req.body
 
-  if(!token || !password || !confirmPassword) return res.status(400).json({ message: 'token y contraseña son requeridos' })
+  if (!token || !password || !confirmPassword) return res.status(400).json({ message: 'token y contraseña son requeridos' })
   if (password !== confirmPassword) return res.status(400).json({ message: 'Las contraseñas no coinciden' })
 
   try {
