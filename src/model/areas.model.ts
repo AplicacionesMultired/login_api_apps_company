@@ -21,7 +21,8 @@ Area.init({
   descripcion: { type: DataTypes.STRING(50), allowNull: false }
 }, {
   tableName: 'areas',
-  sequelize: marcacion
+  sequelize: marcacion,
+  timestamps: false
 })
 
 export { Area };
