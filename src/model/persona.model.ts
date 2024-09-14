@@ -1,0 +1,82 @@
+import { Model, DataTypes, Optional } from 'sequelize';
+import { marcacion } from '../connections/marcacion';
+
+interface PersonaAttributes {
+  id: number;
+  tipoIdentificacion: string;
+  identificacion: string;
+  nombres: string;
+  apellidos: string;
+  email: string;
+  direccion: string;
+  ciudad: string;
+  tipoPersona: string;
+  rH: string;
+  telefono: string;
+  observaciones: string;
+  cod_nomina: string;
+  id_Dependencias: number;
+  id_Empresa: number;
+  estado: string;
+  id_Grupo_Horario: number;
+  id_Areas: number;
+  id_Ciudad: number;
+  id_Centro_Costos: number;
+  id_Cargo: number;
+}
+
+interface PersonaCreationAttributes extends Optional<PersonaAttributes, 'id'> { }
+
+class Persona extends Model<PersonaAttributes, PersonaCreationAttributes> implements PersonaAttributes {
+  public id!: number;
+  public tipoIdentificacion!: string;
+  public identificacion!: string;
+  public nombres!: string;
+  public apellidos!: string;
+  public email!: string;
+  public direccion!: string;
+  public ciudad!: string;
+  public tipoPersona!: string;
+  public rH!: string;
+  public telefono!: string;
+  public observaciones!: string;
+  public cod_nomina!: string;
+  public id_Dependencias!: number;
+  public id_Empresa!: number;
+  public estado!: string;
+  public id_Grupo_Horario!: number;
+  public id_Areas!: number;
+  public id_Ciudad!: number;
+  public id_Centro_Costos!: number;
+  public id_Cargo!: number;
+}
+
+Persona.init({
+  id: { type: DataTypes.INTEGER.UNSIGNED, autoIncrement: true, primaryKey: true, },
+  tipoIdentificacion: { type: new DataTypes.STRING(50), allowNull: false, },
+  identificacion: { type: new DataTypes.STRING(50), allowNull: false, },
+  nombres: { type: new DataTypes.STRING(50), allowNull: false, },
+  apellidos: { type: new DataTypes.STRING(50), allowNull: false, },
+  email: { type: new DataTypes.STRING(50), allowNull: false, },
+  direccion: { type: new DataTypes.STRING(50), allowNull: false, },
+  ciudad: { type: new DataTypes.STRING(50), allowNull: false, },
+  tipoPersona: { type: new DataTypes.STRING(50), allowNull: false, },
+  rH: { type: new DataTypes.STRING(50), allowNull: false, },
+  telefono: { type: new DataTypes.STRING(50), allowNull: false, },
+  observaciones: { type: new DataTypes.STRING(50), allowNull: false, },
+  cod_nomina: { type: new DataTypes.STRING(50), allowNull: false, },
+  id_Dependencias: { type: new DataTypes.INTEGER, allowNull: false, },
+  id_Empresa: { type: new DataTypes.INTEGER, allowNull: false, },
+  estado: { type: new DataTypes.STRING(50), allowNull: false, },
+  id_Grupo_Horario: { type: new DataTypes.INTEGER, allowNull: false, },
+  id_Areas: { type: new DataTypes.INTEGER, allowNull: false, },
+  id_Ciudad: { type: new DataTypes.INTEGER, allowNull: false, },
+  id_Centro_Costos: { type: new DataTypes.INTEGER, allowNull: false, },
+  id_Cargo: { type: new DataTypes.INTEGER, allowNull: false, },
+}, {
+  tableName: 'persona',
+  sequelize: marcacion,
+  timestamps: false,
+});
+
+export { Persona };

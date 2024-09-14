@@ -1,10 +1,12 @@
 import { UserType, UserLoginType } from '../Schemas/UserSchema';
+import { CustomError } from '../class/ClassErrorSql';
 import { User } from '../model/user.model';
 import bcrypt from 'bcryptjs';
 import 'dotenv/config';
 
 const BCRYPT_SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS as string, 10);
 const USERNAME_PREFIX = 'CP';
+
 
 const generateUsername = (document: string): string => {
   return `${USERNAME_PREFIX}${document}`;
@@ -36,22 +38,26 @@ export const loginUserServices = async (user: UserLoginType) => {
     const userFound = await User.findOne({ where: { username: user.username } });
 
     if (!userFound) {
-      throw new Error('Usuario no encontrado');
+      throw new CustomError('Usuario no encontrado', 'El usuario proporcionado no existe.');
     }
 
     const passwordMatch = bcrypt.compareSync(user.password, userFound.password);
 
     if (!passwordMatch) {
-      throw new Error('Contraseña incorrecta');
+      throw new CustomError('Contraseña incorrecta', 'La contraseña proporcionada no coincide con la registrada.');
     }
 
     if (userFound.state === false) {
-      throw new Error('El Usuario se encuentra inactivo');
+      throw new CustomError('Usuario inactivo', 'El usuario se encuentra inactivo y no puede iniciar sesión.');
     }
 
     return userFound;
   } catch (error) {
-    throw error;
+    if (error instanceof CustomError) {
+      throw error;
+    } else {
+      throw new CustomError('Error del servidor', 'Ocurrió un error inesperado en el servidor.');
+    }
   }
 }
 
