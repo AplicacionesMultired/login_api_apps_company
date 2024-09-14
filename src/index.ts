@@ -6,6 +6,7 @@ import express from 'express';
 import morgan from 'morgan';
 
 import { userRouter } from './routes/user.routes';
+import { personaRouter } from './routes/persona.routes';
 
 const v1 = '/api/v1';
 
@@ -19,6 +20,7 @@ app.use(corsMiddleware);
 
 // TODO: rutas de la API
 app.use(v1, userRouter);
+app.use(v1, personaRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
