@@ -3,7 +3,7 @@ import { Persona } from '../model/persona.model';
 
 export const getPersonas = async (req: Request, res: Response) => {
   try {
-    const personas = await Persona.findAll();
+    const personas = await Persona.findAll({ attributes: ['id', 'identificacion', 'nombres', 'apellidos'] });
     
     return res.status(200).json(personas);
   } catch (error) {
