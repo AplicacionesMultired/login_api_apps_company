@@ -51,3 +51,44 @@ export const newArea = async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+export const deleteArea = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ message: 'id es requerido' });
+  }
+
+  try {
+    const result = await Area.destroy({ where: { id } });
+    if (!result) {
+      return res.status(400).json({ message: 'No se pudo eliminar el área' });
+    }
+
+    return res.status(200).json({ message: 'Area Eliminada Correctamente' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+export const updateArea = async (req: Request, res: Response) => {
+  const { id, codigo, nombre } = req.body;
+
+  if (!id || !codigo || !nombre) {
+    return res.status(400).json({ message: 'id, código y nombre área son requeridos' });
+  }
+
+  try {
+    const result = await Area.update({ codigo, descripcion: nombre }, { where: { id } });
+
+    if (!result) {
+      return res.status(400).json({ message: 'No se pudo actualizar el área' });
+    }
+
+    return res.status(200).json({ message: 'Area Actualizada Correctamente' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
