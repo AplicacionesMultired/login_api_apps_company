@@ -286,3 +286,15 @@ export const deleteGrupoTurno = async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+export const getAllGrupovsTurnos = async (req: Request, res: Response) => {
+  try {
+    const horario = await Turno.findAll();
+    const grupoHorario = await GrupoHorario.findAll();
+
+    return res.status(200).json({ horario, grupoHorario });
+  } catch (error){
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
