@@ -9,7 +9,7 @@ export const getMarcaciones = async (req: Request, res: Response) => {
     const marcaciones = await Marcacion.findAll({
       attributes: ['id', 'id_empleado', 'fecha_marcacion', 'estado_marcacion'], 
       where: (fn('DATE', col('fecha_marcacion')), Op.eq, fn('CURDATE')),
-      limit: 20,
+      // limit: 20,
       include: [{
         model: Persona,
         attributes: ['nombres'], 
