@@ -4,6 +4,7 @@ import { Area } from '../model/areas.model';
 import { Cargo } from '../model/cargos.model'; 
 import { Turno } from '../model/turnos.model';
 import { GrupoHorario } from '../model/grupohorario.model';
+import { GphorHorario } from '../model/gphor_horario.model';
 
 export const gellAllEmpresas = async (req: Request, res: Response) => {
   try {
@@ -291,8 +292,9 @@ export const getAllGrupovsTurnos = async (req: Request, res: Response) => {
   try {
     const horario = await Turno.findAll();
     const grupoHorario = await GrupoHorario.findAll();
+    const horariosAsginados = await GphorHorario.findAll();
 
-    return res.status(200).json({ horario, grupoHorario });
+    return res.status(200).json({ horario, grupoHorario, asignados: horariosAsginados });
   } catch (error){
     console.log(error);
     return res.status(500).json({ message: 'Internal server error' });
