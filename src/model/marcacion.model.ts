@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { marcacion } from '../connections/marcacion';
-
+import { Persona } from './persona.model';
+ 
 // +---------------------+--------------+------+-----+---------+----------------+
 // | Field               | Type         | Null | Key | Default | Extra          |
 // +---------------------+--------------+------+-----+---------+----------------+
@@ -54,6 +55,7 @@ export class Marcacion extends Model<MarcacionAttributes, MarcacionCreationAttri
   public Latitud!: string;
   public Longitud!: string;
   public id_foto_temota!: string;
+  public Persona!: Persona;
 }
 
 Marcacion.init(
@@ -79,3 +81,5 @@ Marcacion.init(
     timestamps: false,
   }
 );
+
+Marcacion.belongsTo(Persona, { foreignKey: 'id_empleado', targetKey: 'id' });
