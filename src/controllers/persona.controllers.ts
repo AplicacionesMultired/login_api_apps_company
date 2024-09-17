@@ -15,7 +15,10 @@ export const getPersonas = async (req: Request, res: Response) => {
 export const getPersonaById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const persona = await Persona.findByPk(id);
+    const persona = await Persona.findOne({
+      where: { id },
+      attributes: ['id', 'identificacion', 'nombres', 'apellidos', 'email', 'telefono']
+    });
     
     return res.status(200).json(persona);
   } catch (error) {
