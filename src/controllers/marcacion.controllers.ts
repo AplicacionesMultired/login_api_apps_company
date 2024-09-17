@@ -1,8 +1,7 @@
-import { col, fn, Op, where } from 'sequelize';
 import { Marcacion } from '../model/marcacion.model';
 import { Persona } from '../model/persona.model';
+import { col, fn, Op, where } from 'sequelize';
 import { Request, Response } from 'express';
-import { marcacion } from '../connections/marcacion';
 
 export const getMarcaciones = async (req: Request, res: Response) => {
   // Obtener los parámetros de paginación de la solicitud
@@ -30,7 +29,6 @@ export const getMarcaciones = async (req: Request, res: Response) => {
         attributes: ['nombres', 'apellidos'],
       }]
     });
-
 
     // Formatear los datos
     const marcacionesFormateadas = rows.map(marcacion => {
