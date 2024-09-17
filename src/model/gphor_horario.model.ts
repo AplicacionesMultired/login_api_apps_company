@@ -3,23 +3,23 @@ import { DataTypes, Model, Optional } from "sequelize";
 import { GrupoHorario } from './grupohorario.model';
 import { Turno } from './turnos.model';
 
-interface GphorHorarioAttributes {
+interface GrupoTurnoVsHorarioAttributes {
   id: number;
   IdGrupoHorario: number;
   IdHorario: number;
   diaSeman: string;
 }
 
-interface GphorHorarioCreationAttributes extends Optional<GphorHorarioAttributes, "id"> { }
+interface GrupoTurnoVsHorarioCreationAttributes extends Optional<GrupoTurnoVsHorarioAttributes, "id"> { }
 
-export class GphorHorario extends Model<GphorHorarioAttributes, GphorHorarioCreationAttributes> implements GphorHorarioAttributes {
+export class GrupoTurnoVsHorario extends Model<GrupoTurnoVsHorarioAttributes, GrupoTurnoVsHorarioCreationAttributes> implements GrupoTurnoVsHorarioAttributes {
   public id!: number;
   public IdGrupoHorario!: number;
   public IdHorario!: number;
   public diaSeman!: string;
 }
 
-GphorHorario.init(
+GrupoTurnoVsHorario.init(
   {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, },
     IdGrupoHorario: { type: DataTypes.INTEGER, allowNull: false },
@@ -33,5 +33,5 @@ GphorHorario.init(
   }
 );
 
-GphorHorario.belongsTo(GrupoHorario, { foreignKey: 'IdGrupoHorario', targetKey: 'id' });
-GphorHorario.belongsTo(Turno, { foreignKey: 'IdHorario', targetKey: 'id' }); 
+GrupoTurnoVsHorario.belongsTo(GrupoHorario, { foreignKey: 'IdGrupoHorario', targetKey: 'id' });
+GrupoTurnoVsHorario.belongsTo(Turno, { foreignKey: 'IdHorario', targetKey: 'id' }); 

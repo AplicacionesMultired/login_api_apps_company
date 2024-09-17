@@ -1,4 +1,4 @@
-import { GphorHorario } from '../model/gphor_horario.model';
+import { GrupoTurnoVsHorario } from '../model/gphor_horario.model';
 import { GrupoHorario } from '../model/grupohorario.model';
 import { Empresa } from '../model/empresa.model';
 import { Turno } from '../model/turnos.model';
@@ -292,7 +292,7 @@ export const getAllGrupovsTurnos = async (req: Request, res: Response) => {
   try {
     const horario = await Turno.findAll({ attributes: ['id', 'descripcion'] });
     const grupoHorario = await GrupoHorario.findAll({ attributes: ['id', 'descripcion'] });
-    const horariosAsginados = await GphorHorario.findAll({
+    const horariosAsginados = await GrupoTurnoVsHorario.findAll({
       include: [
         { model: GrupoHorario, attributes: ['id', 'descripcion'] },
         { model: Turno, attributes: ['id', 'descripcion'] }
@@ -300,6 +300,27 @@ export const getAllGrupovsTurnos = async (req: Request, res: Response) => {
     });
 
     return res.status(200).json({ horario, grupoHorario, asignados: horariosAsginados });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+export const createNewGrupovsTurnos = async (req: Request, res: Response) => {
+  const { grupoHorario, turno, dias } = req.body;
+
+  console.log(req.body);
+  
+  if (!grupoHorario || !turno || !Array.isArray(dias) || dias.length === 0) {
+    return res.status(400).json({ message: 'grupoHorario, turno y días son requeridos y días debe ser un array no vacío' });
+  }
+
+  try {
+    const results = await Promise.all(dias.map((dia: string) => {
+      return GrupoTurnoVsHorario.create({ IdGrupoHorario: grupoHorario, IdHorario: turno, diaSeman: dia });
+    }));
+
+    return res.status(201).json({ message: 'Grupo Turnos Creado Correctamente' });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal server error' });
