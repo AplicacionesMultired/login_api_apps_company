@@ -306,6 +306,26 @@ export const getAllGrupovsTurnos = async (req: Request, res: Response) => {
   }
 }
 
+export const deleteGrupovsTurnos = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ message: 'id es requerido' });
+  }
+
+  try {
+    const result = await GrupoTurnoVsHorario.destroy({ where: { id } });
+    if (!result) {
+      return res.status(400).json({ message: 'No se pudo eliminar el grupo turno' });
+    }
+
+    return res.status(200).json({ message: 'Grupo Turno Eliminado Correctamente' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
 export const createNewGrupovsTurnos = async (req: Request, res: Response) => {
   const { grupoHorario, turno, dias } = req.body;
 
@@ -316,7 +336,7 @@ export const createNewGrupovsTurnos = async (req: Request, res: Response) => {
   }
 
   try {
-    const results = await Promise.all(dias.map((dia: string) => {
+    await Promise.all(dias.map((dia: string) => {
       return GrupoTurnoVsHorario.create({ IdGrupoHorario: grupoHorario, IdHorario: turno, diaSeman: dia });
     }));
 

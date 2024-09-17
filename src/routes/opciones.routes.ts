@@ -1,4 +1,4 @@
-import { deleteArea, gellAllEmpresas, getAllCargos, getAreas, newArea, updateArea, deleteCargo, newCargo, updateCargo, getAllTurnos, newTurno, deleteTurno, getAllGrupoTurnos, deleteGrupoTurno, newGrupoTurno, getAllGrupovsTurnos, createNewGrupovsTurnos } from '../controllers/opciones.controllers';
+import { deleteArea, gellAllEmpresas, getAllCargos, getAreas, newArea, updateArea, deleteCargo, newCargo, updateCargo, getAllTurnos, newTurno, deleteTurno, getAllGrupoTurnos, deleteGrupoTurno, newGrupoTurno, getAllGrupovsTurnos, createNewGrupovsTurnos, deleteGrupovsTurnos } from '../controllers/opciones.controllers';
 import { Router } from 'express';
 
 export const opcionesRouter = Router();
@@ -25,3 +25,4 @@ opcionesRouter.delete('/grupo-turno/:id', deleteGrupoTurno);
 
 opcionesRouter.get('/grupovsturnos', getAllGrupovsTurnos);
 opcionesRouter.post('/creategpvstur', createNewGrupovsTurnos);
+opcionesRouter.delete('/grupovsturnos/:id', deleteGrupovsTurnos);
