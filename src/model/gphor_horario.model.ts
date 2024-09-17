@@ -1,5 +1,7 @@
 import { marcacion } from '../connections/marcacion';
 import { DataTypes, Model, Optional } from "sequelize";
+import { GrupoHorario } from './grupohorario.model';
+import { Turno } from './turnos.model';
 
 interface GphorHorarioAttributes {
   id: number;
@@ -31,3 +33,5 @@ GphorHorario.init(
   }
 );
 
+GphorHorario.belongsTo(GrupoHorario, { foreignKey: 'IdGrupoHorario', targetKey: 'id' });
+GphorHorario.belongsTo(Turno, { foreignKey: 'IdHorario', targetKey: 'id' }); 

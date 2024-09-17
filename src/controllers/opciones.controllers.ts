@@ -1,10 +1,10 @@
+import { GphorHorario } from '../model/gphor_horario.model';
+import { GrupoHorario } from '../model/grupohorario.model';
 import { Empresa } from '../model/empresa.model';
+import { Turno } from '../model/turnos.model';
+import { Cargo } from '../model/cargos.model';
 import { Request, Response } from 'express';
 import { Area } from '../model/areas.model';
-import { Cargo } from '../model/cargos.model'; 
-import { Turno } from '../model/turnos.model';
-import { GrupoHorario } from '../model/grupohorario.model';
-import { GphorHorario } from '../model/gphor_horario.model';
 
 export const gellAllEmpresas = async (req: Request, res: Response) => {
   try {
@@ -184,7 +184,7 @@ export const getAllTurnos = async (req: Request, res: Response) => {
   }
 }
 
-export const newTurno = async (req: Request, res: Response) => { 
+export const newTurno = async (req: Request, res: Response) => {
   const { codigo, descripcion, hora_inicio, hora_fin, tolerancia_despues_entrada, teorico, tolerancia_antes_salir, tiempo_breack, conceptos } = req.body;
 
   if (!codigo || !descripcion || !hora_inicio || !hora_fin || !teorico || !tolerancia_despues_entrada || !tolerancia_antes_salir || !tiempo_breack) {
@@ -290,12 +290,17 @@ export const deleteGrupoTurno = async (req: Request, res: Response) => {
 
 export const getAllGrupovsTurnos = async (req: Request, res: Response) => {
   try {
-    const horario = await Turno.findAll();
-    const grupoHorario = await GrupoHorario.findAll();
-    const horariosAsginados = await GphorHorario.findAll();
+    const horario = await Turno.findAll({ attributes: ['id', 'descripcion'] });
+    const grupoHorario = await GrupoHorario.findAll({ attributes: ['id', 'descripcion'] });
+    const horariosAsginados = await GphorHorario.findAll({
+      include: [
+        { model: GrupoHorario, attributes: ['id', 'descripcion'] },
+        { model: Turno, attributes: ['id', 'descripcion'] }
+      ]
+    });
 
     return res.status(200).json({ horario, grupoHorario, asignados: horariosAsginados });
-  } catch (error){
+  } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal server error' });
   }
