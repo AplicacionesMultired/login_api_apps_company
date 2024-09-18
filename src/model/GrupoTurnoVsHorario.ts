@@ -1,7 +1,7 @@
 import { marcacion } from '../connections/marcacion';
 import { DataTypes, Model, Optional } from 'sequelize';
 import { GrupoHorario } from './grupohorario.model';
-import { Turno } from './turnos.model';
+import { Turnos } from './turnos.model';
 
 interface GrupoTurnoVsHorarioAttributes {
   id: number;
@@ -34,4 +34,4 @@ GrupoTurnoVsHorario.init(
 );
 
 GrupoTurnoVsHorario.belongsTo(GrupoHorario, { foreignKey: 'IdGrupoHorario', targetKey: 'id'})
-GrupoTurnoVsHorario.belongsTo(Turno, { foreignKey: 'IdHorario', targetKey: 'id'})
+GrupoTurnoVsHorario.belongsTo(Turnos, { foreignKey: 'IdHorario', targetKey: 'id'})

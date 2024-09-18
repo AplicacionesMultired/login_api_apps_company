@@ -16,7 +16,7 @@ interface TurnoAttributes {
 
 interface TurnoCreationAttributes extends Optional<TurnoAttributes, "id"> { }
 
-export class Turno extends Model<TurnoAttributes, TurnoCreationAttributes> implements TurnoAttributes {
+export class Turnos extends Model<TurnoAttributes, TurnoCreationAttributes> implements TurnoAttributes {
   public id!: number;
   public codigo!: string;
   public descripcion!: string;
@@ -29,7 +29,7 @@ export class Turno extends Model<TurnoAttributes, TurnoCreationAttributes> imple
   public conceptos!: string;
 }
 
-Turno.init(
+Turnos.init(
   {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, },
     codigo: { type: DataTypes.STRING, allowNull: false },

@@ -1,7 +1,7 @@
 import { GrupoTurnoVsHorario } from '../model/GrupoTurnoVsHorario';
 import { GrupoHorario } from '../model/grupohorario.model';
 import { Empresa } from '../model/empresa.model';
-import { Turno } from '../model/turnos.model';
+import { Turnos } from '../model/turnos.model';
 import { Cargo } from '../model/cargos.model';
 import { Request, Response } from 'express';
 import { Area } from '../model/areas.model';
@@ -176,7 +176,7 @@ export const updateCargo = async (req: Request, res: Response) => {
 
 export const getAllTurnos = async (req: Request, res: Response) => {
   try {
-    const turnos = await Turno.findAll();
+    const turnos = await Turnos.findAll();
     return res.status(200).json(turnos);
   } catch (error) {
     console.log(error);
@@ -192,13 +192,13 @@ export const newTurno = async (req: Request, res: Response) => {
   }
 
   try {
-    const exist = await Turno.findOne({ where: { codigo } });
+    const exist = await Turnos.findOne({ where: { codigo } });
 
     if (exist) {
       return res.status(400).json({ message: 'El código de turno ya existe' });
     }
 
-    const result = await Turno.create({ codigo, descripcion, hora_inicio, hora_fin, teorico, tolerancia_despues_entrada, tolerancia_antes_salir, tiempo_breack, conceptos });
+    const result = await Turnos.create({ codigo, descripcion, hora_inicio, hora_fin, teorico, tolerancia_despues_entrada, tolerancia_antes_salir, tiempo_breack, conceptos });
 
     if (!result) {
       return res.status(400).json({ message: 'No se pudo crear el turno' });
@@ -225,7 +225,7 @@ export const deleteTurno = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'No se puede eliminar el turno, ya que se encuentra ligado a un grupo' });
     }
 
-    const result = await Turno.destroy({ where: { id } });
+    const result = await Turnos.destroy({ where: { id } });
     if (!result) {
       return res.status(400).json({ message: 'No se pudo eliminar el turno' });
     }
@@ -296,12 +296,12 @@ export const deleteGrupoTurno = async (req: Request, res: Response) => {
 
 export const getAllGrupovsTurnos = async (req: Request, res: Response) => {
   try {
-    const horario = await Turno.findAll({ attributes: ['id', 'descripcion'] });
+    const horario = await Turnos.findAll({ attributes: ['id', 'descripcion'] });
     const grupoHorario = await GrupoHorario.findAll({ attributes: ['id', 'descripcion'] });
     const horariosAsginados = await GrupoTurnoVsHorario.findAll({
       include: [
         { model: GrupoHorario, attributes: ['id', 'descripcion'] },
-        { model: Turno, attributes: ['id', 'descripcion'] }
+        { model: Turnos, attributes: ['id', 'descripcion'] }
       ]
     });
 
