@@ -1,5 +1,5 @@
 import { marcacion } from '../connections/marcacion';
-import { DataTypes, Model, Optional } from "sequelize";
+import { DataTypes, Model, Optional } from 'sequelize';
 import { GrupoHorario } from './grupohorario.model';
 import { Turno } from './turnos.model';
 
@@ -10,7 +10,7 @@ interface GrupoTurnoVsHorarioAttributes {
   diaSeman: string;
 }
 
-interface GrupoTurnoVsHorarioCreationAttributes extends Optional<GrupoTurnoVsHorarioAttributes, "id"> { }
+interface GrupoTurnoVsHorarioCreationAttributes extends Optional<GrupoTurnoVsHorarioAttributes, 'id'> { }
 
 export class GrupoTurnoVsHorario extends Model<GrupoTurnoVsHorarioAttributes, GrupoTurnoVsHorarioCreationAttributes> implements GrupoTurnoVsHorarioAttributes {
   public id!: number;
@@ -27,11 +27,11 @@ GrupoTurnoVsHorario.init(
     diaSeman: { type: DataTypes.STRING, allowNull: false },
   },
   {
-    tableName: "grupohorario_horario",
+    tableName: 'grupohorario_horario',
     sequelize: marcacion,
     timestamps: false,
   }
 );
 
-GrupoTurnoVsHorario.belongsTo(GrupoHorario, { foreignKey: 'IdGrupoHorario', targetKey: 'id' });
-GrupoTurnoVsHorario.belongsTo(Turno, { foreignKey: 'IdHorario', targetKey: 'id' }); 
+GrupoTurnoVsHorario.belongsTo(GrupoHorario, { foreignKey: 'IdGrupoHorario', targetKey: 'id'})
+GrupoTurnoVsHorario.belongsTo(Turno, { foreignKey: 'IdHorario', targetKey: 'id'})

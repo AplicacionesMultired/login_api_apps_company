@@ -1,18 +1,3 @@
-// +-------------------------------+--------------+------+-----+---------+----------------+
-// | Field                         | Type         | Null | Key | Default | Extra          |
-// +-------------------------------+--------------+------+-----+---------+----------------+
-// | id                            | int unsigned | NO   | PRI | NULL    | auto_increment |
-// | codigo                        | varchar(255) | YES  |     | NULL    |                |
-// | descripcion                   | varchar(255) | YES  |     | NULL    |                |
-// | hora_inicio                   | varchar(255) | YES  |     | NULL    |                |
-// | hora_fin                      | varchar(255) | YES  |     | NULL    |                |
-// | teorico                       | varchar(255) | YES  |     | NULL    |                |
-// | tolerancia_despues_entrada    | varchar(255) | YES  |     | NULL    |                |
-// | tolerancia_antes_salir        | varchar(255) | YES  |     | NULL    |                |
-// | tiempo_breack                 | varchar(255) | YES  |     | NULL    |                |
-// | conceptos                     | varchar(255) | YES  |     | NULL    |                |
-// +-------------------------------+--------------+------+-----+---------+----------------+
-
 import { DataTypes, Model, Optional } from "sequelize";
 import { marcacion } from '../connections/marcacion';
 

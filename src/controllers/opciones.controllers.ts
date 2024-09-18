@@ -1,4 +1,4 @@
-import { GrupoTurnoVsHorario } from '../model/gphor_horario.model';
+import { GrupoTurnoVsHorario } from '../model/GrupoTurnoVsHorario';
 import { GrupoHorario } from '../model/grupohorario.model';
 import { Empresa } from '../model/empresa.model';
 import { Turno } from '../model/turnos.model';

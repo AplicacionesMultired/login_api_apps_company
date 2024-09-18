@@ -1,25 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { marcacion } from '../connections/marcacion';
 import { Persona } from './persona.model';
- 
-// +---------------------+--------------+------+-----+---------+----------------+
-// | Field               | Type         | Null | Key | Default | Extra          |
-// +---------------------+--------------+------+-----+---------+----------------+
-// | id                  | int unsigned | NO   | PRI | NULL    | auto_increment |
-// | id_empleado         | int          | YES  |     | NULL    |                |
-// | fecha_marcacion     | datetime     | YES  |     | NULL    |                |
-// | estado_marcacion    | varchar(255) | YES  |     | NULL    |                |
-// | nombre_dispositivo  | varchar(255) | YES  |     | NULL    |                |
-// | observacion         | varchar(500) | YES  |     | NULL    |                |
-// | observacionPersonal | varchar(500) | YES  |     | NULL    |                |
-// | id_turno            | int          | YES  |     | NULL    |                |
-// | Pais                | varchar(20)  | YES  |     | NULL    |                |
-// | Ciudad              | varchar(20)  | YES  |     | NULL    |                |
-// | Direccion           | longtext     | YES  |     | NULL    |                |
-// | Latitud             | longtext     | YES  |     | NULL    |                |
-// | Longitud            | longtext     | YES  |     | NULL    |                |
-// | id_foto_temota      | varchar(200) | YES  |     | NULL    |                |
-// +---------------------+--------------+------+-----+---------+----------------+
 
 export interface MarcacionAttributes {
   id?: number;
