@@ -1,11 +1,3 @@
-// +-------------+--------------+------+-----+---------+----------------+
-// | Field       | Type         | Null | Key | Default | Extra          |
-// +-------------+--------------+------+-----+---------+----------------+
-// | id          | int unsigned | NO   | PRI | NULL    | auto_increment |
-// | codigo      | varchar(255) | YES  |     | NULL    |                |
-// | descripcion | varchar(255) | YES  |     | NULL    |                |
-// +-------------+--------------+------+-----+---------+----------------+
-
 import { Model, DataTypes, Optional } from 'sequelize'
 import { marcacion } from '../connections/marcacion'
 

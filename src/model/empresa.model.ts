@@ -1,17 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import { marcacion } from '../connections/marcacion';
 
-// id	int(10) unsigned	NO	PRI	(null)	auto_increment
-// nombre	varchar(255)	NO		(null)	
-// nit	varchar(50)	YES		(null)	
-// direccion	varchar(2000)	YES		(null)	
-// contacto	varchar(255)	YES		(null)	
-// email	varchar(50)	YES		(null)	
-// telefono	varchar(255)	YES		(null)	
-// ext	varchar(255)	YES		(null)	
-// ciudad	varchar(200)	YES		(null)	
-// observacion	longtext	YES		(null)	
-
 interface EmpresaAttributes {
   id: number;
   nombre: string;
