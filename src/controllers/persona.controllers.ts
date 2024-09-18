@@ -33,3 +33,24 @@ export const getPersonaById = async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Error en el servidor', error });
   }
 }
+
+export const updatePersona = async (req: Request, res: Response) => {
+  const { fields, id } = req.body;
+  const { nombres, apellidos, email, telefono, id_Areas, id_Cargo, id_Grupo_Horario } = fields;
+  
+  try {
+    const id_Dependencias = 1; const id_Empresa = 1; const id_Ciudad = 1; const id_Centro_Costos = 1;
+   
+    const persona = await Persona.findByPk(id);
+    if (!persona) {
+      return res.status(404).json({ message: 'Persona no encontrada' });
+    }
+
+    await persona.update({ nombres, apellidos, email, telefono, id_Areas, id_Cargo, id_Grupo_Horario, id_Dependencias, id_Empresa, id_Ciudad, id_Centro_Costos });
+
+    return res.status(200).json({ message: 'Persona actualizada' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Error en el servidor', error });
+  }
+}
