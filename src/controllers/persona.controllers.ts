@@ -23,9 +23,9 @@ export const getPersonaById = async (req: Request, res: Response) => {
       attributes: ['id', 'identificacion', 'nombres', 'apellidos', 'email', 'telefono']
     });
 
-    const Areas = await Area.findAll({ attributes: ['id', 'descripcion'] });
-    const Cargos = await Cargo.findAll({ attributes: ['ID', 'descripcion'] });
-    const GruposHorario = await GrupoHorario.findAll({ attributes: ['id', 'descripcion'] });
+    const Areas = await Area.findAll();
+    const Cargos = await Cargo.findAll();
+    const GruposHorario = await GrupoHorario.findAll();
     
     return res.status(200).json({ persona, options: { Areas, Cargos, GruposHorario } });
   } catch (error) {
