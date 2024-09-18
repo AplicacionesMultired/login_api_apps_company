@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
 import { Persona } from '../model/persona.model';
+import { Area } from '../model/areas.model';
+import { Cargo } from '../model/cargos.model';
+import { GrupoHorario } from '../model/grupohorario.model';
 
 export const getPersonas = async (req: Request, res: Response) => {
   try {
@@ -19,8 +22,12 @@ export const getPersonaById = async (req: Request, res: Response) => {
       where: { id },
       attributes: ['id', 'identificacion', 'nombres', 'apellidos', 'email', 'telefono']
     });
+
+    const Areas = await Area.findAll({ attributes: ['id', 'descripcion'] });
+    const Cargos = await Cargo.findAll({ attributes: ['ID', 'descripcion'] });
+    const GruposHorario = await GrupoHorario.findAll({ attributes: ['id', 'descripcion'] });
     
-    return res.status(200).json(persona);
+    return res.status(200).json({ persona, options: { Areas, Cargos, GruposHorario } });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Error en el servidor', error });
