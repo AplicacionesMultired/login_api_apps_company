@@ -219,6 +219,12 @@ export const deleteTurno = async (req: Request, res: Response) => {
   }
 
   try {
+    const existInGrupo = await GrupoTurnoVsHorario.findOne({ where: { IdHorario: id } });
+
+    if (existInGrupo) {
+      return res.status(400).json({ message: 'No se puede eliminar el turno, ya que se encuentra ligado a un grupo' });
+    }
+
     const result = await Turno.destroy({ where: { id } });
     if (!result) {
       return res.status(400).json({ message: 'No se pudo eliminar el turno' });
