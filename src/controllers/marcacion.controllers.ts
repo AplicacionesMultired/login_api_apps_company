@@ -76,7 +76,7 @@ export const getAuditMarcacion = async (req: Request, res: Response) => {
           model: GrupoTurnoVsHorario,
           where: { diaSeman: getDayOfWeekString() },
           include: [{
-            attributes: ['descripcion', 'hora_inicio'],
+            attributes: ['descripcion', 'tolerancia_despues_entrada'],
             model: Turnos
           }]
         }]
@@ -90,7 +90,7 @@ export const getAuditMarcacion = async (req: Request, res: Response) => {
         apellidos: marcacion.Persona.apellidos,
         hora_marcacion: marcacion.fecha_marcacion.toTimeString().split(' ')[0].slice(0, 5),
         estado_marcacion: marcacion.estado_marcacion,
-        hora_inicio: marcacion.Persona.GrupoTurnoVsHorarios[0].Turno.hora_inicio
+        hora_inicio: marcacion.Persona.GrupoTurnoVsHorarios[0].Turno.tolerancia_despues_entrada
       }
     })
    
