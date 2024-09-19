@@ -63,8 +63,9 @@ export const getAuditMarcacion = async (req: Request, res: Response) => {
       attributes: ['id', 'fecha_marcacion', 'estado_marcacion'],
       where: {
         [Op.and]: [
-          where(fn('DATE', col('fecha_marcacion')), Op.eq, fn('CURDATE'))
-        ]
+          where(fn('DATE', col('fecha_marcacion')), Op.eq, fn('CURDATE')),
+          where(col('estado_marcacion'), Op.eq, 'Entrada')
+        ],
       },
       include: [{
         attributes: ['nombres', 'apellidos'],
