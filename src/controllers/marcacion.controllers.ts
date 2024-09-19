@@ -60,7 +60,7 @@ export const getMarcaciones = async (req: Request, res: Response) => {
 export const getAuditMarcacion = async (req: Request, res: Response) => {
   try {
     const result = await Marcacion.findAll({
-      attributes: ['fecha_marcacion', 'estado_marcacion'],
+      attributes: ['id', 'fecha_marcacion', 'estado_marcacion'],
       where: {
         [Op.and]: [
           where(fn('DATE', col('fecha_marcacion')), Op.eq, fn('CURDATE'))
@@ -82,8 +82,19 @@ export const getAuditMarcacion = async (req: Request, res: Response) => {
         }]
       }]
     });
+
+    const marcacionesFormateadas = result.map(marcacion => {
+      return {
+        id: marcacion.id,
+        nombres: marcacion.Persona.nombres,
+        apellidos: marcacion.Persona.apellidos,
+        hora_marcacion: marcacion.fecha_marcacion.toTimeString().split(' ')[0].slice(0, 5),
+        estado_marcacion: marcacion.estado_marcacion,
+        hora_inicio: marcacion.Persona.GrupoTurnoVsHorarios[0].Turno.hora_inicio
+      }
+    })
    
-    return res.status(200).json(result);
+    return res.status(200).json(marcacionesFormateadas);
   } catch (error) {
     console.error('Error al obtener las marcaciones:', error);
     return res.status(500).json({ message: 'Internal server error' });

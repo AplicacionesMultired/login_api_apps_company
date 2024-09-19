@@ -17,6 +17,7 @@ export class GrupoTurnoVsHorario extends Model<GrupoTurnoVsHorarioAttributes, Gr
   public IdGrupoHorario!: number;
   public IdHorario!: number;
   public diaSeman!: string;
+  public Turno!: Turnos;
 }
 
 GrupoTurnoVsHorario.init(

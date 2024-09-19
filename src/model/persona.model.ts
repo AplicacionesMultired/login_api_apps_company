@@ -50,6 +50,7 @@ class Persona extends Model<PersonaAttributes, PersonaCreationAttributes> implem
   public id_Ciudad!: number;
   public id_Centro_Costos!: number;
   public id_Cargo!: number;
+  public GrupoTurnoVsHorarios!: GrupoTurnoVsHorario[];
 }
 
 Persona.init({
