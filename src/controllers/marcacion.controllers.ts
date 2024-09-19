@@ -57,7 +57,7 @@ export const getMarcaciones = async (req: Request, res: Response) => {
   }
 }
 
-export const getAuditMarcación = async (req: Request, res: Response) => {
+export const getAuditMarcacion = async (req: Request, res: Response) => {
   try {
     const result = await Marcacion.findAll({
       attributes: ['fecha_marcacion', 'estado_marcacion'],
