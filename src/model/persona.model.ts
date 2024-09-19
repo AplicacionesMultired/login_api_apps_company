@@ -1,5 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import { marcacion } from '../connections/marcacion';
+import { GrupoTurnoVsHorario } from './GrupoTurnoVsHorario';
 
 interface PersonaAttributes {
   id: number;
@@ -80,3 +81,5 @@ Persona.init({
 });
 
 export { Persona };
+
+Persona.hasMany(GrupoTurnoVsHorario, { foreignKey: 'IdGrupoHorario', sourceKey: 'id_Grupo_Horario' });
