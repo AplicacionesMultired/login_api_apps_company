@@ -282,6 +282,16 @@ export const deleteGrupoTurno = async (req: Request, res: Response) => {
   }
 
   try {
+    const existeGpHorario = await GrupoTurnoVsHorario.findOne({ where: { IdGrupoHorario: id } });
+    if (existeGpHorario) {
+      return res.status(400).json({ message: 'No se puede eliminar el grupo turno, ya que contiene turnos asignados' });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Error al consultar la table Grupo Vs Horario' });
+  }
+
+  try {
     const result = await GrupoHorario.destroy({ where: { id } });
     if (!result) {
       return res.status(400).json({ message: 'No se pudo eliminar el grupo turno' });
