@@ -1,6 +1,10 @@
+import { getPersonas, getPersonaById, updatePersona } from '../controllers/persona.controllers';
 import { Router } from 'express';
-import { getPersonas } from '../controllers/persona.controllers';
 
 export const personaRouter = Router();
 
 personaRouter.get('/personas', getPersonas);
+
+personaRouter.get('/persona/:id', getPersonaById);
+
+personaRouter.patch('/persona', updatePersona);
