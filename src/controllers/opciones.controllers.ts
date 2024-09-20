@@ -5,6 +5,7 @@ import { Turnos } from '../model/turnos.model';
 import { Cargo } from '../model/cargos.model';
 import { Request, Response } from 'express';
 import { Area } from '../model/areas.model';
+import { Persona } from '../model/persona.model';
 
 export const gellAllEmpresas = async (req: Request, res: Response) => {
   try {
@@ -292,6 +293,13 @@ export const deleteGrupoTurno = async (req: Request, res: Response) => {
   }
 
   try {
+
+    const result2 = await Persona.findAll({ where: { id_Grupo_Horario: id } });
+
+    result2.map(async (persona) => {
+      await persona.update({ id_Grupo_Horario: null });
+    });
+
     const result = await GrupoHorario.destroy({ where: { id } });
     if (!result) {
       return res.status(400).json({ message: 'No se pudo eliminar el grupo turno' });

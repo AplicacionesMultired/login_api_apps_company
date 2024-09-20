@@ -19,7 +19,7 @@ interface PersonaAttributes {
   id_Dependencias: number;
   id_Empresa: number;
   estado: string;
-  id_Grupo_Horario: number;
+  id_Grupo_Horario: number | null;
   id_Areas: number;
   id_Ciudad: number;
   id_Centro_Costos: number;
@@ -45,7 +45,7 @@ class Persona extends Model<PersonaAttributes, PersonaCreationAttributes> implem
   public id_Dependencias!: number;
   public id_Empresa!: number;
   public estado!: string;
-  public id_Grupo_Horario!: number;
+  public id_Grupo_Horario!: number | null;
   public id_Areas!: number;
   public id_Ciudad!: number;
   public id_Centro_Costos!: number;
@@ -70,7 +70,7 @@ Persona.init({
   id_Dependencias: { type: DataTypes.INTEGER, allowNull: false, },
   id_Empresa: { type: DataTypes.INTEGER, allowNull: false, },
   estado: { type: DataTypes.STRING(50), allowNull: false, },
-  id_Grupo_Horario: { type: DataTypes.INTEGER, allowNull: false, },
+  id_Grupo_Horario: { type: DataTypes.INTEGER, allowNull: true, },
   id_Areas: { type: DataTypes.INTEGER, allowNull: false, },
   id_Ciudad: { type: DataTypes.INTEGER, allowNull: false, },
   id_Centro_Costos: { type: DataTypes.INTEGER, allowNull: false, },
