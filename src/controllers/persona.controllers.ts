@@ -1,8 +1,8 @@
-import { Request, Response } from 'express';
-import { Persona } from '../model/persona.model';
-import { Area } from '../model/areas.model';
-import { Cargo } from '../model/cargos.model';
 import { GrupoHorario } from '../model/grupohorario.model';
+import { Persona } from '../model/persona.model';
+import { Cargo } from '../model/cargos.model';
+import { Request, Response } from 'express';
+import { Area } from '../model/areas.model';
 
 export const getPersonas = async (req: Request, res: Response) => {
   try {

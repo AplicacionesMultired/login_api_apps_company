@@ -12,25 +12,17 @@ const getDayOfWeekString = (): string => {
 };
 
 export const getMarcaciones = async (req: Request, res: Response) => {
-  // Obtener los parámetros de paginación de la solicitud
-  const page = parseInt(req.query.page as string, 10) || 1;
-  const pageSize = parseInt(req.query.pageSize as string, 10) || 20;
+
   const fecha = req.query.fecha as string;
 
-  // Calcular el offset
-  const offset = (page - 1) * pageSize;
-
   try {
-    // Realizar la consulta con paginación
-    const { count, rows } = await Marcacion.findAndCountAll({
+    const { rows } = await Marcacion.findAndCountAll({
       attributes: ['id', 'id_empleado', 'fecha_marcacion', 'estado_marcacion'],
       where: {
         [Op.and]: [
           where(fn('DATE', col('fecha_marcacion')), Op.eq, (fecha ? fecha : fn('CURDATE')))
         ]
       },
-      limit: pageSize,
-      offset: offset,
       order: [['id', 'DESC']],
       include: [{
         model: Persona,
@@ -47,10 +39,10 @@ export const getMarcaciones = async (req: Request, res: Response) => {
         fecha_marcacion: marcacion.fecha_marcacion.toDateString() + ' ' + marcacion.fecha_marcacion.toTimeString().split(' ')[0],
         estado_marcacion: marcacion.estado_marcacion
       }
-    });
+    }).sort((a, b) => new Date(b.fecha_marcacion).getTime() - new Date(a.fecha_marcacion).getTime());
 
     // Enviar la respuesta con los datos paginados
-    return res.status(200).json({ page, pageSize, total: count, marcaciones: marcacionesFormateadas });
+    return res.status(200).json( marcacionesFormateadas );
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal server error' });
@@ -94,7 +86,7 @@ export const getAuditMarcacion = async (req: Request, res: Response) => {
         hora_inicio: marcacion.Persona.GrupoTurnoVsHorarios[0].Turno.tolerancia_despues_entrada
       }
     })
-   
+
     return res.status(200).json(marcacionesFormateadas);
   } catch (error) {
     console.error('Error al obtener las marcaciones:', error);
