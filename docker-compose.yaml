@@ -8,6 +8,8 @@ services:
     image: login:v1.0
     restart: always
     container_name: api_login_v1
+    environment:
+      - TZ=America/Bogota
     networks:
       - red-gane-int
     # ports:
