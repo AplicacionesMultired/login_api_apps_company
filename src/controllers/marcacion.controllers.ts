@@ -16,16 +16,14 @@ export const getMarcaciones = async (req: Request, res: Response) => {
   const fechaInitial = req.query.fechaInitial as string;
   const fechaFinal = req.query.fechaFinal as string;
 
-  // where(fn('DATE', col('fecha_marcacion')), Op.eq, (fecha ? fecha : fn('CURDATE')))
-
-  const opc = [{ fecha_marcacion: { [Op.between]: [fechaInitial, fechaFinal] } } ]
-  const opc2 = where(fn('DATE', col('fecha_marcacion')), Op.eq, (fechaInitial ? fechaInitial : fn('CURDATE')))
+  const opc1 = where(fn('DATE', col('fecha_marcacion')), Op.eq, (fechaInitial ? fechaInitial : fn('CURDATE')))
+  const opc2 = [{ fecha_marcacion: { [Op.between]: [fechaInitial, fechaFinal] } }]
 
   try {
     const { count, rows } = await Marcacion.findAndCountAll({
       attributes: ['id', 'id_empleado', 'fecha_marcacion', 'estado_marcacion'],
       where: {
-        [Op.and]: fechaFinal ? opc : opc2
+        [Op.and]: fechaInitial && fechaFinal ? opc2 : opc1
       },
       order: [['id', 'DESC']],
       include: [{
@@ -33,8 +31,6 @@ export const getMarcaciones = async (req: Request, res: Response) => {
         attributes: ['nombres', 'apellidos'],
       }]
     });
-
-    console.log(count);
 
     // Formatear los datos
     const marcacionesFormateadas = rows.map(marcacion => {
@@ -48,7 +44,7 @@ export const getMarcaciones = async (req: Request, res: Response) => {
     }).sort((a, b) => new Date(b.fecha_marcacion).getTime() - new Date(a.fecha_marcacion).getTime());
 
     // Enviar la respuesta con los datos paginados
-    return res.status(200).json(marcacionesFormateadas);
+    return res.status(200).json({ marcaciones: marcacionesFormateadas, count });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal server error' });
