@@ -13,15 +13,17 @@ const getDayOfWeekString = (): string => {
 
 export const getMarcaciones = async (req: Request, res: Response) => {
 
-  const fecha = req.query.fecha as string;
+  const fechaInitial = req.query.fechaInitial as string;
+  const fechaFinal = req.query.fechaFinal as string;
+
+  const opc1 = where(fn('DATE', col('fecha_marcacion')), Op.eq, (fechaInitial ? fechaInitial : fn('CURDATE')))
+  const opc2 = [{ fecha_marcacion: { [Op.between]: [fechaInitial, fechaFinal] } }]
 
   try {
-    const { rows } = await Marcacion.findAndCountAll({
+    const { count, rows } = await Marcacion.findAndCountAll({
       attributes: ['id', 'id_empleado', 'fecha_marcacion', 'estado_marcacion'],
       where: {
-        [Op.and]: [
-          where(fn('DATE', col('fecha_marcacion')), Op.eq, (fecha ? fecha : fn('CURDATE')))
-        ]
+        [Op.and]: fechaInitial && fechaFinal ? opc2 : opc1
       },
       order: [['id', 'DESC']],
       include: [{
@@ -42,7 +44,7 @@ export const getMarcaciones = async (req: Request, res: Response) => {
     }).sort((a, b) => new Date(b.fecha_marcacion).getTime() - new Date(a.fecha_marcacion).getTime());
 
     // Enviar la respuesta con los datos paginados
-    return res.status(200).json( marcacionesFormateadas );
+    return res.status(200).json({ marcaciones: marcacionesFormateadas, count });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal server error' });
@@ -69,7 +71,7 @@ export const getAuditMarcacion = async (req: Request, res: Response) => {
           model: GrupoTurnoVsHorario,
           where: { diaSeman: getDayOfWeekString() },
           include: [{
-            attributes: ['descripcion', 'tolerancia_despues_entrada'],
+            attributes: ['descripcion', 'hora_inicio'],
             model: Turnos
           }]
         }]
@@ -83,7 +85,7 @@ export const getAuditMarcacion = async (req: Request, res: Response) => {
         apellidos: marcacion.Persona.apellidos,
         hora_marcacion: marcacion.fecha_marcacion.toTimeString().split(' ')[0].slice(0, 5),
         estado_marcacion: marcacion.estado_marcacion,
-        hora_inicio: marcacion.Persona.GrupoTurnoVsHorarios[0].Turno.tolerancia_despues_entrada
+        hora_inicio: marcacion.Persona.GrupoTurnoVsHorarios[0].Turno.hora_inicio
       }
     })
 
