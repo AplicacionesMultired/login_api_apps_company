@@ -16,35 +16,33 @@ export const getMarcaciones = async (req: Request, res: Response) => {
   const fechaInitial = req.query.fechaInitial as string;
   const fechaFinal = req.query.fechaFinal as string;
 
-  const opc1 = where(fn('DATE', col('fecha_marcacion')), Op.eq, (fechaInitial ? fechaInitial : fn('CURDATE')))
-  const opc2 = [{ fecha_marcacion: { [Op.between]: [fechaInitial, fechaFinal] } }]
+  console.log(fechaInitial);
+  console.log(fechaFinal);
+  
 
   try {
-    const { count, rows } = await Marcacion.findAndCountAll({
-      attributes: ['id', 'id_empleado', 'fecha_marcacion', 'estado_marcacion'],
-      where: {
-        [Op.and]: fechaInitial && fechaFinal ? opc2 : opc1
-      },
-      order: [['id', 'DESC']],
+    const { rows, count } = await Marcacion.findAndCountAll({
+      attributes: ['Id', 'codigo', 'Fecha', 'Hora', 'estado'],
       include: [{
-        model: Persona,
         attributes: ['nombres', 'apellidos'],
+        model: Persona,
       }]
     });
 
     // Formatear los datos
-    const marcacionesFormateadas = rows.map(marcacion => {
+    const marcacionesFormateadas = rows.map(m => {
       return {
-        id: marcacion.id,
-        nombres: marcacion.Persona.nombres,
-        apellidos: marcacion.Persona.apellidos,
-        fecha_marcacion: marcacion.fecha_marcacion.toDateString() + ' ' + marcacion.fecha_marcacion.toTimeString().split(' ')[0],
-        estado_marcacion: marcacion.estado_marcacion
+        id: m.Id,
+        nombres: m.Persona!.nombres,
+        apellidos: m.Persona.apellidos,
+        fecha: m.Fecha,
+        hora: m.Hora,
+        estado: m.estado
       }
-    }).sort((a, b) => new Date(b.fecha_marcacion).getTime() - new Date(a.fecha_marcacion).getTime());
+    }).sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
 
     // Enviar la respuesta con los datos paginados
-    return res.status(200).json({ marcaciones: marcacionesFormateadas, count });
+    return res.status(200).json({ marcaciones: marcacionesFormateadas, total: count });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal server error' });
@@ -78,18 +76,18 @@ export const getAuditMarcacion = async (req: Request, res: Response) => {
       }]
     });
 
-    const marcacionesFormateadas = result.map(marcacion => {
-      return {
-        id: marcacion.id,
-        nombres: marcacion.Persona.nombres,
-        apellidos: marcacion.Persona.apellidos,
-        hora_marcacion: marcacion.fecha_marcacion.toTimeString().split(' ')[0].slice(0, 5),
-        estado_marcacion: marcacion.estado_marcacion,
-        hora_inicio: marcacion.Persona.GrupoTurnoVsHorarios[0].Turno.hora_inicio
-      }
-    })
+    // const marcacionesFormateadas = result.map(marcacion => {
+    //   return {
+    //     id: result.id,
+    //     nombres: result.Persona.nombres,
+    //     apellidos: result.Persona.apellidos,
+    //     hora_marcacion: result.fecha_result.toTimeString().split(' ')[0].slice(0, 5),
+    //     estado_marcacion: result.estado_marcacion,
+    //     hora_inicio: result.Persona.GrupoTurnoVsHorarios[0].Turno.hora_inicio
+    //   }
+    // })
 
-    return res.status(200).json(marcacionesFormateadas);
+    return res.status(200).json({'result': result});
   } catch (error) {
     console.error('Error al obtener las marcaciones:', error);
     return res.status(500).json({ message: 'Internal server error' });

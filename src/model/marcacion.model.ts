@@ -20,6 +20,7 @@ export class Marcacion extends Model<MarcacionAttributes, MarcacionCreationAttri
   public Hora!: Date;
   public estado!: string;
   public dispositivo!: string;
+  public Persona!: Persona;
 }
 
 Marcacion.init(
@@ -27,7 +28,7 @@ Marcacion.init(
     Id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, },
     codigo: { type: DataTypes.STRING, allowNull: false, },
     Fecha: { type: DataTypes.DATE, allowNull: false, },
-    Hora: { type: DataTypes.DATE, allowNull: false, },
+    Hora: { type: DataTypes.TIME, allowNull: false, },
     estado: { type: DataTypes.STRING, allowNull: false, },
     dispositivo: { type: DataTypes.STRING, allowNull: false, },
   },
