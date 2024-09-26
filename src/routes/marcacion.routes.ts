@@ -1,8 +1,8 @@
-import { getMarcaciones, getAuditMarcacion } from '../controllers/marcacion.controllers';
+import { getMarcaciones } from '../controllers/marcacion.controllers';
 import { Router } from "express";
 
 export const marcacionRouter = Router();
 
 marcacionRouter.get('/marcaciones', getMarcaciones);
 
-marcacionRouter.get('/audit-marcacion', getAuditMarcacion);
+// marcacionRouter.get('/audit-marcacion', getAuditMarcacion);
