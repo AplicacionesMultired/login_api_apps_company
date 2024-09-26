@@ -20,10 +20,14 @@ export const getMarcaciones = async (req: Request, res: Response) => {
   try {
     const { rows, count } = await Marcacion.findAndCountAll({
       attributes: ['Id', 'codigo', 'Fecha', 'Hora', 'estado'],
+      where: {
+        Fecha: { [Op.eq]: fn('CURDATE') }
+      },
       include: [{
         attributes: ['nombres', 'apellidos'],
         model: Persona,
-      }]
+      }],
+      order: [['Id', 'DESC']],
     });
 
     // Formatear los datos
@@ -39,7 +43,7 @@ export const getMarcaciones = async (req: Request, res: Response) => {
     }).sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
 
     // Enviar la respuesta con los datos paginados
-    return res.status(200).json({ marcaciones: marcacionesFormateadas, total: count });
+    return res.status(200).json({ marcaciones: marcacionesFormateadas, count });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal server error' });
