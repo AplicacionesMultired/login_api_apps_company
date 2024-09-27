@@ -11,7 +11,7 @@ import jwt from 'jsonwebtoken'
 
 import { Company, Procces, Sub_Procces } from '../utils/Definiciones'
 import { verifyToken } from '../utils/verifyToken'
-import isMainError from '../utils/funtions'
+import { isMainError } from '../utils/funtions'
 import { CustomError } from '../class/ClassErrorSql'
 
 export const createUser = async (req: Request, res: Response) => {

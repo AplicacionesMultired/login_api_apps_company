@@ -1,6 +1,6 @@
 import { Marcacion } from '../model/marcacion.model';
 import { MainError } from '../types/error.mysql';
-import { Estado } from '../types/info';
+import { Estado } from '../enums/Estados';
 
 /**
  * Función para validar si un Error de type unknow pertenece a Interface MainError. 
@@ -17,7 +17,7 @@ function isMainError(error: unknown): error is MainError {
   );
 }
 
-export function reduceStates (marcacion: Marcacion[]) {
+function reduceStates (marcacion: Marcacion[]) {
 
   const estadosMap: { [key: string]: Estado } = {
     'Entrada': Estado.Entrada,
@@ -38,4 +38,4 @@ export function reduceStates (marcacion: Marcacion[]) {
   })
 }
 
-export default isMainError;
+export { isMainError, reduceStates };
