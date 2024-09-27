@@ -6,6 +6,7 @@ import express from 'express';
 import morgan from 'morgan';
 
 import { userRouter } from './routes/user.routes';
+import { infoRoutes } from './routes/info.routes';
 import { personaRouter } from './routes/persona.routes';
 import { opcionesRouter } from './routes/opciones.routes';
 import { marcacionRouter } from './routes/marcacion.routes';
@@ -22,6 +23,7 @@ app.use(corsMiddleware);
 
 // TODO: rutas de la API
 app.use(v1, userRouter);
+app.use(v1, infoRoutes);
 app.use(v1, personaRouter);
 app.use(v1, opcionesRouter);
 app.use(v1, marcacionRouter);
