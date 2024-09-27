@@ -35,6 +35,7 @@ export const getMarcaciones = async (req: Request, res: Response) => {
     const marcacionesFormateadas = rows.map(m => {
       return {
         id: m.Id,
+        documento: m.codigo,
         nombres: m.Persona!.nombres,
         apellidos: m.Persona!.apellidos,
         fecha: m.Fecha,
