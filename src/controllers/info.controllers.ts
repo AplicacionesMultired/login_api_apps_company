@@ -1,7 +1,8 @@
 import { Marcacion } from '../model/marcacion.model'
+import { Persona } from '../model/persona.model';
+import { reduceStates } from '../utils/funtions';
 import { Request, Response } from 'express';
 import { fn, Op } from 'sequelize';
-import { reduceStates } from '../utils/funtions';
 
 export async function infoMarcaciones(req: Request, res: Response) {
 
@@ -10,9 +11,11 @@ export async function infoMarcaciones(req: Request, res: Response) {
       where: { Fecha: { [Op.eq]: fn('CURDATE') } }
     })
 
+    const personas = await Persona.findAll({})
+
     const stados = reduceStates(rows);
 
-    return res.status(200).json({ count, stados })
+    return res.status(200).json({ count, stados, totalPersona: personas.length });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal server error' })
