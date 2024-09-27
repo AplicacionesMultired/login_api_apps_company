@@ -15,14 +15,15 @@ export const getMarcaciones = async (req: Request, res: Response) => {
 
   const fechaInitial = req.query.fechaInitial as string;
   const fechaFinal = req.query.fechaFinal as string;
- 
+
+  const opc = { [Op.between]: [fechaInitial, fechaFinal] };
+  const opc1 = { [Op.eq]: fechaInitial };
+  const opc3 = { [Op.eq]: fn('CURDATE') };
 
   try {
     const { rows, count } = await Marcacion.findAndCountAll({
       attributes: ['Id', 'codigo', 'Fecha', 'Hora', 'estado'],
-      where: {
-        Fecha: { [Op.eq]: fn('CURDATE') }
-      },
+      where: { Fecha: fechaInitial && fechaFinal ? opc : fechaInitial ? opc1 : opc3 },
       include: [{
         attributes: ['nombres', 'apellidos'],
         model: Persona,
