@@ -186,9 +186,9 @@ export const getAllTurnos = async (req: Request, res: Response) => {
 }
 
 export const newTurno = async (req: Request, res: Response) => {
-  const { codigo, descripcion, hora_inicio, hora_fin, tolerancia_despues_entrada, teorico, tolerancia_antes_salir, tiempo_breack, conceptos } = req.body;
+  const { codigo, descripcion, hora_inicio, hora_fin, hora_inicio_break, teorico, hora_fin_break, tiempo_breack, conceptos } = req.body;
 
-  if (!codigo || !descripcion || !hora_inicio || !hora_fin || !teorico || !tolerancia_despues_entrada || !tolerancia_antes_salir || !tiempo_breack) {
+  if (!codigo || !descripcion || !hora_inicio || !hora_fin || !teorico || !hora_inicio_break || !hora_fin_break || !tiempo_breack) {
     return res.status(400).json({ message: 'Todos los campos son requeridos' });
   }
 
@@ -199,7 +199,7 @@ export const newTurno = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'El código de turno ya existe' });
     }
 
-    const result = await Turnos.create({ codigo, descripcion, hora_inicio, hora_fin, teorico, tolerancia_despues_entrada, tolerancia_antes_salir, tiempo_breack, conceptos });
+    const result = await Turnos.create({ codigo, descripcion, hora_inicio, hora_fin, teorico, hora_inicio_break, hora_fin_break, tiempo_breack, conceptos });
 
     if (!result) {
       return res.status(400).json({ message: 'No se pudo crear el turno' });

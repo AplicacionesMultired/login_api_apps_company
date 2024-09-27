@@ -8,8 +8,8 @@ interface TurnoAttributes {
   hora_inicio: string;
   hora_fin: string;
   teorico: string;
-  tolerancia_despues_entrada: string;
-  tolerancia_antes_salir: string;
+  hora_inicio_break: string;
+  hora_fin_break: string;
   tiempo_breack: string;
   conceptos: string;
 }
@@ -23,8 +23,8 @@ export class Turnos extends Model<TurnoAttributes, TurnoCreationAttributes> impl
   public hora_inicio!: string;
   public hora_fin!: string;
   public teorico!: string;
-  public tolerancia_despues_entrada!: string;
-  public tolerancia_antes_salir!: string;
+  public hora_inicio_break!: string;
+  public hora_fin_break!: string;
   public tiempo_breack!: string;
   public conceptos!: string;
 }
@@ -37,8 +37,8 @@ Turnos.init(
     hora_inicio: { type: DataTypes.STRING, allowNull: false },
     hora_fin: { type: DataTypes.STRING, allowNull: false },
     teorico: { type: DataTypes.STRING, allowNull: false },
-    tolerancia_despues_entrada: { type: DataTypes.STRING, allowNull: false },
-    tolerancia_antes_salir: { type: DataTypes.STRING, allowNull: false },
+    hora_inicio_break: { type: DataTypes.STRING, allowNull: false },
+    hora_fin_break: { type: DataTypes.STRING, allowNull: false },
     tiempo_breack: { type: DataTypes.STRING, allowNull: false },
     conceptos: { type: DataTypes.STRING, allowNull: false },
   },

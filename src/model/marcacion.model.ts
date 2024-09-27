@@ -2,65 +2,41 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import { marcacion } from '../connections/marcacion';
 import { Persona } from './persona.model';
 
-export interface MarcacionAttributes {
-  id?: number;
-  id_empleado?: number;
-  fecha_marcacion?: Date;
-  estado_marcacion?: string;
-  nombre_dispositivo?: string;
-  observacion?: string;
-  observacionPersonal?: string;
-  id_turno?: number;
-  Pais?: string;
-  Ciudad?: string;
-  Direccion?: string;
-  Latitud?: string;
-  Longitud?: string;
-  id_foto_temota?: string;
+interface MarcacionAttributes {
+  Id: number;
+  codigo: string;
+  Fecha: Date;
+  Hora: Date;
+  estado: string;
+  dispositivo: string;
 }
 
-export interface MarcacionCreationAttributes extends Optional<MarcacionAttributes, 'id'> { }
+interface MarcacionCreationAttributes extends Optional<MarcacionAttributes, 'Id'> { }
 
 export class Marcacion extends Model<MarcacionAttributes, MarcacionCreationAttributes> implements MarcacionAttributes {
-  public id!: number;
-  public id_empleado!: number;
-  public fecha_marcacion!: Date;
-  public estado_marcacion!: string;
-  public nombre_dispositivo!: string;
-  public observacion!: string;
-  public observacionPersonal!: string;
-  public id_turno!: number;
-  public Pais!: string;
-  public Ciudad!: string;
-  public Direccion!: string;
-  public Latitud!: string;
-  public Longitud!: string;
-  public id_foto_temota!: string;
+  public Id!: number;
+  public codigo!: string;
+  public Fecha!: Date;
+  public Hora!: Date;
+  public estado!: string;
+  public dispositivo!: string;
   public Persona!: Persona;
 }
 
 Marcacion.init(
   {
-    id: { type: DataTypes.INTEGER.UNSIGNED, autoIncrement: true, primaryKey: true },
-    id_empleado: { type: DataTypes.INTEGER, allowNull: true, },
-    fecha_marcacion: { type: DataTypes.DATE, allowNull: true, },
-    estado_marcacion: { type: DataTypes.STRING, allowNull: true, },
-    nombre_dispositivo: { type: DataTypes.STRING, allowNull: true, },
-    observacion: { type: DataTypes.STRING, allowNull: true, },
-    observacionPersonal: { type: DataTypes.STRING, allowNull: true, },
-    id_turno: { type: DataTypes.INTEGER, allowNull: true, },
-    Pais: { type: DataTypes.STRING, allowNull: true, },
-    Ciudad: { type: DataTypes.STRING, allowNull: true, },
-    Direccion: { type: DataTypes.TEXT, allowNull: true, },
-    Latitud: { type: DataTypes.TEXT, allowNull: true, },
-    Longitud: { type: DataTypes.TEXT, allowNull: true, },
-    id_foto_temota: { type: DataTypes.STRING, allowNull: true, },
+    Id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, },
+    codigo: { type: DataTypes.STRING, allowNull: false, },
+    Fecha: { type: DataTypes.DATE, allowNull: false, },
+    Hora: { type: DataTypes.TIME, allowNull: false, },
+    estado: { type: DataTypes.STRING, allowNull: false, },
+    dispositivo: { type: DataTypes.STRING, allowNull: false, },
   },
   {
-    tableName: 'marcacion',
+    tableName: 'registrostiempos',
     sequelize: marcacion,
-    timestamps: false,
+    timestamps: false
   }
 );
 
-Marcacion.belongsTo(Persona, { foreignKey: 'id_empleado', targetKey: 'id' });
+Marcacion.belongsTo(Persona, {  foreignKey: 'codigo',  targetKey: 'identificacion'});

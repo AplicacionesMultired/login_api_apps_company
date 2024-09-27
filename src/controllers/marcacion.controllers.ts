@@ -16,32 +16,32 @@ export const getMarcaciones = async (req: Request, res: Response) => {
   const fechaInitial = req.query.fechaInitial as string;
   const fechaFinal = req.query.fechaFinal as string;
 
-  const opc1 = where(fn('DATE', col('fecha_marcacion')), Op.eq, (fechaInitial ? fechaInitial : fn('CURDATE')))
-  const opc2 = [{ fecha_marcacion: { [Op.between]: [fechaInitial, fechaFinal] } }]
+  const opc = { [Op.between]: [fechaInitial, fechaFinal] };
+  const opc1 = { [Op.eq]: fechaInitial };
+  const opc3 = { [Op.eq]: fn('CURDATE') };
 
   try {
-    const { count, rows } = await Marcacion.findAndCountAll({
-      attributes: ['id', 'id_empleado', 'fecha_marcacion', 'estado_marcacion'],
-      where: {
-        [Op.and]: fechaInitial && fechaFinal ? opc2 : opc1
-      },
-      order: [['id', 'DESC']],
+    const { rows, count } = await Marcacion.findAndCountAll({
+      attributes: ['Id', 'codigo', 'Fecha', 'Hora', 'estado'],
+      where: { Fecha: fechaInitial && fechaFinal ? opc : fechaInitial ? opc1 : opc3 },
       include: [{
-        model: Persona,
         attributes: ['nombres', 'apellidos'],
-      }]
+        model: Persona,
+      }],
+      order: [['Id', 'DESC']],
     });
 
     // Formatear los datos
-    const marcacionesFormateadas = rows.map(marcacion => {
+    const marcacionesFormateadas = rows.map(m => {
       return {
-        id: marcacion.id,
-        nombres: marcacion.Persona.nombres,
-        apellidos: marcacion.Persona.apellidos,
-        fecha_marcacion: marcacion.fecha_marcacion.toDateString() + ' ' + marcacion.fecha_marcacion.toTimeString().split(' ')[0],
-        estado_marcacion: marcacion.estado_marcacion
+        id: m.Id,
+        nombres: m.Persona!.nombres,
+        apellidos: m.Persona!.apellidos,
+        fecha: m.Fecha,
+        hora: m.Hora,
+        estado: m.estado
       }
-    }).sort((a, b) => new Date(b.fecha_marcacion).getTime() - new Date(a.fecha_marcacion).getTime());
+    }).sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
 
     // Enviar la respuesta con los datos paginados
     return res.status(200).json({ marcaciones: marcacionesFormateadas, count });
@@ -51,16 +51,13 @@ export const getMarcaciones = async (req: Request, res: Response) => {
   }
 }
 
+
+// TODO: organizar el audit marcacion
 export const getAuditMarcacion = async (req: Request, res: Response) => {
   try {
     const result = await Marcacion.findAll({
-      attributes: ['id', 'fecha_marcacion', 'estado_marcacion'],
-      where: {
-        [Op.and]: [
-          where(fn('DATE', col('fecha_marcacion')), Op.eq, fn('CURDATE')),
-          where(col('estado_marcacion'), Op.eq, 'Entrada')
-        ],
-      },
+      attributes: ['Id', 'Hora', 'estado'],
+      where: { Fecha: { [Op.eq]: fn('CURDATE') } },
       include: [{
         attributes: ['nombres', 'apellidos'],
         model: Persona,
@@ -80,11 +77,11 @@ export const getAuditMarcacion = async (req: Request, res: Response) => {
 
     const marcacionesFormateadas = result.map(marcacion => {
       return {
-        id: marcacion.id,
+        id: marcacion.Id,
         nombres: marcacion.Persona.nombres,
         apellidos: marcacion.Persona.apellidos,
-        hora_marcacion: marcacion.fecha_marcacion.toTimeString().split(' ')[0].slice(0, 5),
-        estado_marcacion: marcacion.estado_marcacion,
+        hora: marcacion.Hora.toString().slice(0, 5),
+        estado: marcacion.estado,
         hora_inicio: marcacion.Persona.GrupoTurnoVsHorarios[0].Turno.hora_inicio
       }
     })
