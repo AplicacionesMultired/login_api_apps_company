@@ -12,8 +12,6 @@ services:
       - TZ=America/Bogota
     networks:
       - red-gane-int
-    # ports:
-    #   - "4000:80"
 networks:
   red-gane-int:
     external: true
