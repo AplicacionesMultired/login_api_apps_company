@@ -136,8 +136,13 @@ export const findAllUsers = async (req: Request, res: Response) => {
       }
     })
 
+    if (users.length === 0) {
+      return res.status(404).json({ message: 'Users not found in database' });
+    }
+
     return res.status(200).json(users);
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
