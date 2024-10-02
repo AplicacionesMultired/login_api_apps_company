@@ -3,8 +3,8 @@ import { validateUser, validateUserLogin } from '../Schemas/UserSchema'
 import { Request, Response } from 'express'
 import cryto from 'node:crypto'
 
-const JWT_SECRET = process.env.JWT_SECRET as string
 const JWT_EXPIRES = process.env.JWT_EXPIRES_IN as string
+const JWT_SECRET = process.env.JWT_SECRET as string
 const NODE_ENV = process.env.ENTORNO as string
 
 import jwt from 'jsonwebtoken'
@@ -25,8 +25,13 @@ export const createUser = async (req: Request, res: Response) => {
 
     const userCreated = await registerUserServices(result.data)
 
-    return res.status(201).json(userCreated)
+    if (!userCreated) {
+      return res.status(400).json({ message: 'Error al crear el usuario' })
+    }
+
+    return res.status(201).json('Usuario creado correctamente')
   } catch (error: unknown) {
+    console.log(error);
     if (isMainError(error)) {
       return res.status(400).json({ errorCode: error.parent.code, message: error.parent.sqlMessage })
     } else if (error instanceof Error) {
