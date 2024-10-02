@@ -59,6 +59,6 @@ export function validateUser(data: unknown) {
   return User.safeParseAsync(data);
 }
 
-export function validateUserLogin(user: UserLoginType) {
-  return UserLogin.safeParseAsync(user);
+export function validateUserLogin(data: unknown) {
+  return UserLogin.safeParseAsync(data);
 }

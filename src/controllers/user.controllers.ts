@@ -84,9 +84,16 @@ export const loginUser = async (req: Request, res: Response) => {
 }
 
 export const UserByToken = async (req: Request, res: Response) => {
+
+  console.log(req.cookies);
+  console.log(req.query);
+  
+  
   try {
     const app: string = req.query.app as string;
     const token = req.cookies[app];
+
+    console.log(token);
 
     if (!token) {
       return res.status(401).json({ message: 'Unauthorized' });
