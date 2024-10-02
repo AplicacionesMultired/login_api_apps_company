@@ -1,8 +1,4 @@
-import dotenv from 'dotenv';
 import cors from 'cors';
-
-// Cargar variables de entorno desde el archivo .env
-dotenv.config();
 
 const CORS_ORIGINS: string[] = (process.env.CORS_ORIGINS as string).split(',');
 
