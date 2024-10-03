@@ -56,12 +56,12 @@ export const loginUser = async (req: Request, res: Response) => {
       id: user.id,
       names: user.names,
       lastnames: user.lastNames,
+      document: user.document,
       username: user.username,
       email: user.email,
       company: Company(user.company),
       process: Procces(user.process),
       sub_process: Sub_Procces(user.sub_process),
-      app: app
     }
 
     jwt.sign(usuario, JWT_SECRET, { expiresIn: JWT_EXPIRES }, (err, token) => {
@@ -84,16 +84,10 @@ export const loginUser = async (req: Request, res: Response) => {
 }
 
 export const UserByToken = async (req: Request, res: Response) => {
-
-  console.log(req.cookies);
-  console.log(req.query);
-  
   
   try {
     const app: string = req.query.app as string;
     const token = req.cookies[app];
-
-    console.log(token);
 
     if (!token) {
       return res.status(401).json({ message: 'Unauthorized' });
@@ -115,13 +109,17 @@ export const UserByToken = async (req: Request, res: Response) => {
 }
 
 export const logoutUser = async (req: Request, res: Response) => {
-  const token = req.body.token as string;
-  const clearToken = token.split('=')[0]
+  const token = req.headers.cookie as string;
+
+  if (!token) {
+    return res.status(400).json({ message: 'Token not found' });
+  }
 
   try {
-    // TODO: en el futuro se debe recibir el nombre de la cookie a eliminar
+    const clearToken = token.split('=')[0]
     return res.clearCookie(clearToken).status(200).json({ message: 'Logout successful' })
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: 'Internal server error' })
   }
 }
