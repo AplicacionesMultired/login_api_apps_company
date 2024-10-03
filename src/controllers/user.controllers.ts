@@ -135,7 +135,6 @@ export const findAllUsers = async (req: Request, res: Response) => {
         phone: user.phone,
         names: user.names,
         lastnames: user.lastNames,
-        username: user.username,
         email: user.email,
         company: Company(user.company),
         process: Procces(user.process),
