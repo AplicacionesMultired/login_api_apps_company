@@ -52,26 +52,13 @@ const UserLogin = z.object({
   })
 })
 
-
 export type UserType = z.infer<typeof User>;
 export type UserLoginType = z.infer<typeof UserLogin>;
 
-function convertUserTypes(user: UserType): UserType {
-  return {
-    ...user,
-    document: parseInt(user.document as any),
-    phone: parseInt(user.phone as any),
-    company: parseInt(user.company as any),
-    process: parseInt(user.process as any),
-    sub_process: parseInt(user.sub_process as any),
-  };
+export function validateUser(data: unknown) {
+  return User.safeParseAsync(data);
 }
 
-export function validateUser(user: UserType) {
-  const convertedUser = convertUserTypes(user);
-  return User.safeParseAsync(convertedUser);
-}
-
-export function validateUserLogin(user: UserLoginType) {
-  return UserLogin.safeParseAsync(user);
+export function validateUserLogin(data: unknown) {
+  return UserLogin.safeParseAsync(data);
 }

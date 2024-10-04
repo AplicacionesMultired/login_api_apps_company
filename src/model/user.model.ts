@@ -7,31 +7,31 @@ interface UserAttributes extends UserType {
   username: string;
   password: string;
   state: boolean;
-  password2?: string | null;
-  resetPasswordToken?: string | null;
-  resetPasswordExpires?: Date | null;
+  password2: string;
+  resetPasswordToken: string | null;
+  resetPasswordExpires: Date | null;
 } 
 
 type UserCreationAttributes = Optional<UserAttributes, 'id' | 'password2' | 'resetPasswordToken' | 'resetPasswordExpires'>
 
 class User extends Model<UserAttributes, UserCreationAttributes> {
-  public id!: string;
-  public names!: string;
-  public lastNames!: string;
-  public document!: number;
-  public phone!: number;
-  public email!: string;
-  public username!: string;
-  public password!: string;
-  public state!: boolean;
-  public password2!: string | null;
-  public resetPasswordToken!: string | null;
-  public resetPasswordExpires!: Date | null;
-  public company!: number;
-  public process!: number;
-  public sub_process!: number;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare id: string;
+  declare names: string;
+  declare lastNames: string;
+  declare document: number;
+  declare phone: number;
+  declare email: string;
+  declare username: string;
+  declare password: string;
+  declare state: boolean;
+  declare password2: string | null;
+  declare resetPasswordToken: string | null;
+  declare resetPasswordExpires: Date | null;
+  declare company: number;
+  declare process: number;
+  declare sub_process: number;
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 }
 
 User.init({
