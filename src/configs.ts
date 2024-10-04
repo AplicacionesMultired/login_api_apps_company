@@ -1,7 +1,4 @@
-import dotenv from 'dotenv';
 import { login_unif } from './connections/login_unificado';
-
-dotenv.config();
 
 export const { 
   PORT = 3000,

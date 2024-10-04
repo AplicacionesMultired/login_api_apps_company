@@ -2,7 +2,6 @@ import { UserType, UserLoginType } from '../Schemas/UserSchema';
 import { CustomError } from '../class/ClassErrorSql';
 import { User } from '../model/user.model';
 import bcrypt from 'bcryptjs';
-import 'dotenv/config';
 
 const BCRYPT_SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS as string, 10);
 const USERNAME_PREFIX = 'CP';
