@@ -4,6 +4,11 @@
   "main": "index.js",
   "repository": "https://github.com/AplicacionesMultired/login_unificado.git",
   "author": "llOrTeGall <IvanOrtega_97@hotmail.com>",
+  
+  "collaborators": [
+    "Cebastian Perez <cebastian@gmail.com>"
+  ],
+
   "license": "MIT",
   "scripts": {
     "start": "node --env-file=.env ./dist/index.js",
